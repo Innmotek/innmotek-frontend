@@ -15,8 +15,15 @@ export const metadata = {
   title: 'Innmotek | Advanced Thermal Technology & Heat Pump Systems',
   description: 'Pioneering sustainable heating solutions, aerothermal heat pumps, and hot water thermal systems engineered for maximum COP efficiency.',
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' }
+    ],
+    shortcut: ['/favicon.ico']
   }
 };
 
@@ -25,6 +32,11 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" className="dark scroll-smooth">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+      </head>
       <body className="bg-[#0A0A0A] text-white min-h-screen flex flex-col antialiased selection:bg-[#C5A880] selection:text-[#0A0A0A]">
         {/* Navigation Bar */}
         <Header categories={categories} />
