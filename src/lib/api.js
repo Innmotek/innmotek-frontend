@@ -121,4 +121,31 @@ export async function getServiceDetail(slug) {
   return data?.service || null;
 }
 
+export async function subscribeNewsletter(email) {
+  try {
+    const res = await fetch(`${API_BASE}/subscribers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    return {
+      ok: res.ok,
+      status: res.status,
+      data
+    };
+  } catch (err) {
+    console.error('[API Error] subscribeNewsletter:', err);
+    return {
+      ok: false,
+      status: 500,
+      data: { result: 'error', message: 'Network error. Please try again later.' }
+    };
+  }
+}
+
 export { API_BASE };

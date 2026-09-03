@@ -482,8 +482,9 @@ export default async function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 8: TESTIMONIALS STRIP (With Real Names from Database)
+          SECTION 8: TESTIMONIALS STRIP (Preserved - hidden on Home to match legacy behavior)
           ========================================================================= */}
+      {/* 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-2 max-w-xl mx-auto">
           <span className="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">
@@ -532,6 +533,7 @@ export default async function HomePage() {
           })}
         </div>
       </section>
+      */}
 
       {/* =========================================================================
           SECTION 9: BOTTOM CALL-TO-ACTION (Pattern 1 variant)
