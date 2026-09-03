@@ -105,10 +105,10 @@ export default function Header({ categories = [] }) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#0A0A0A]/95 backdrop-blur-xl border-b border-[#222222] py-3.5 shadow-2xl'
-            : 'bg-gradient-to-b from-[#0A0A0A]/95 via-[#0A0A0A]/60 to-transparent py-5'
+            ? 'bg-[#0A0A0A]/98 backdrop-blur-xl border-b border-[#222222] py-3.5 shadow-2xl'
+            : 'bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/90 to-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -152,10 +152,14 @@ export default function Header({ categories = [] }) {
                 <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${productsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
               </button>
 
-              {/* Full-Width Hierarchical Mega Dropdown Panel */}
+              {/* Full-Width Hierarchical Mega Dropdown Panel (100% Solid Backdrop - No Bleed-through) */}
               {productsOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[980px] max-w-[95vw] rounded-3xl border border-[#2B2B2B] bg-[#111111]/98 backdrop-blur-2xl p-7 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] animate-fadeIn z-50">
-                  <div className="grid grid-cols-3 gap-6 lg:gap-8">
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[1000px] max-w-[95vw] rounded-3xl border border-[#2E2E2E] bg-gradient-to-b from-[#181818] via-[#131313] to-[#0E0E0E] p-8 shadow-[0_35px_90px_rgba(0,0,0,0.98)] ring-1 ring-white/10 animate-fadeIn z-[100] relative overflow-hidden">
+                  {/* Subtle Ambient Top Glow */}
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -top-24 left-1/3 w-80 h-80 bg-[#C5A880]/[0.03] rounded-full blur-3xl pointer-events-none" />
+
+                  <div className="relative z-10 grid grid-cols-3 gap-6 lg:gap-8">
                     {categories.map((cat) => {
                       const IconComp = CATEGORY_ICONS[cat.slug] || FolderTree;
                       const hasSubs = cat.subCategory && cat.subCategory.length > 0;
@@ -166,7 +170,7 @@ export default function Header({ categories = [] }) {
                           {/* Parent Category Header Link */}
                           <Link
                             href={parentHref}
-                            className="group/parent flex items-center space-x-2.5 pb-2 border-b border-[#222222] transition-colors"
+                            className="group/parent flex items-center space-x-2.5 pb-2 border-b border-[#242424] transition-colors"
                           >
                             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
                               <IconComp className="h-4 w-4" />
@@ -185,7 +189,7 @@ export default function Header({ categories = [] }) {
                                   <li key={sub.slug || sub.id}>
                                     <Link
                                       href={subHref}
-                                      className="group/sub flex items-center justify-between py-1 px-2 rounded-lg text-[11px] text-neutral-400 hover:text-white hover:bg-[#1A1A1A] transition-all"
+                                      className="group/sub flex items-center justify-between py-1 px-2 rounded-lg text-[11px] text-neutral-400 hover:text-white hover:bg-[#1E1E1E] transition-all"
                                     >
                                       <span className="line-clamp-1 group-hover/sub:text-[#C5A880] transition-colors">
                                         {sub.title}
@@ -213,14 +217,14 @@ export default function Header({ categories = [] }) {
                   </div>
 
                   {/* Mega-Menu Footer Bar */}
-                  <div className="mt-6 pt-4 border-t border-[#1F1F1F] flex items-center justify-between text-xs">
+                  <div className="relative z-10 mt-7 pt-4 border-t border-[#222222] flex items-center justify-between text-xs">
                     <div className="flex items-center space-x-2 text-neutral-400 text-[11px]">
                       <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
                       <span>Certified German Engineering & Sub-Zero Himalayan Testing</span>
                     </div>
                     <Link
-                      href="/categories"
-                      className="inline-flex items-center space-x-1.5 rounded-full bg-[#1A1A1A] hover:bg-[#C5A880] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all"
+                      href="/category"
+                      className="inline-flex items-center space-x-1.5 rounded-full bg-[#1C1C1C] hover:bg-[#C5A880] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all"
                     >
                       <span>Full Equipment Catalogue</span>
                       <ArrowRight className="h-3 w-3" />
