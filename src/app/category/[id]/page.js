@@ -12,10 +12,11 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import SafeHtml from '@/components/common/safe-html';
-import { getCategoryProducts, getCategoryDetail } from '@/lib/api';
-import { ArrowRight, ChevronRight, Layers, Flame, PhoneCall, Sparkles } from 'lucide-react';
 import { notFound } from 'next/navigation';
+import { getCategoryDetail, getCategoryProducts } from '@/lib/api';
+import { ChevronRight, Sparkles, Layers, ArrowRight } from 'lucide-react';
+import ProductCard from '@/components/common/product-card';
+import SafeHtml from '@/components/common/safe-html';
 
 export const revalidate = 30;
 
@@ -104,58 +105,7 @@ export default async function CategoryDetailPage({ params }) {
         {products.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {products.map((product) => (
-              <div
-                key={product.slug}
-                className="group relative flex flex-col justify-between rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden transition-all duration-300 hover:border-[#C5A880] shadow-xl"
-              >
-                {/* Product Visual Container */}
-                <div className="relative h-64 sm:h-72 w-full bg-[#181818] overflow-hidden">
-                  {product.image ? (
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      fill
-                      className="object-cover object-center transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-neutral-700">
-                      <Layers className="h-12 w-12" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent" />
-                </div>
-
-                {/* Info Block */}
-                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <h3 className="text-base font-bold text-white group-hover:text-[#C5A880] transition-colors line-clamp-2">
-                      {product.title}
-                    </h3>
-                    {product.summary ? (
-                      <SafeHtml
-                        className="text-xs text-neutral-400 line-clamp-3 prose prose-invert prose-xs"
-                        html={product.summary}
-                      />
-                    ) : (
-                      <p className="text-xs text-neutral-500">
-                        High-efficiency commercial and residential thermal performance.
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Thermatec Pinned Action Bar */}
-                  <div className="pt-4 border-t border-[#1F1F1F]">
-                    <Link
-                      href={`/products/${product.slug}`}
-                      className="flex items-center justify-between rounded-xl bg-[#1A1A1A] hover:bg-[#C5A880] p-3 text-[#C5A880] hover:text-[#0A0A0A] font-bold text-xs uppercase tracking-wider transition-all duration-300 group/btn"
-                    >
-                      <span>View Specifications</span>
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              <ProductCard key={product.slug || product.id} product={product} />
             ))}
           </div>
         ) : (

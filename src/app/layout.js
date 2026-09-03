@@ -32,11 +32,6 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" className="dark scroll-smooth">
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-      </head>
       <body className="bg-[#0A0A0A] text-white min-h-screen flex flex-col antialiased selection:bg-[#C5A880] selection:text-[#0A0A0A]">
         {/* Navigation Bar */}
         <Header categories={categories} />
