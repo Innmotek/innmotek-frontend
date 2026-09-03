@@ -1,20 +1,21 @@
 /**
- * Innmotek Frontend - Global Navigation Header (Pattern 3: Architectural Navigation Bar)
+ * Innmotek Frontend - Global Navigation Header & Hierarchical Mega-Menu
  * 
  * Replaces old CRA Header:
- *   Innmotek-frontend-OLD/src/components/header/
+ *   Innmotek-frontend-OLD/src/frontend/layouts/navigation/index.js
  * 
  * Features:
- *   - Dark glassmorphism floating bar with gold accent indicators
- *   - Real Innmotek brand logo integration
- *   - Category mega-dropdown & direct links
- *   - Mobile responsive drawer
- *   - "Request Quote" / "Contact Us" CTA
+ *   - Dark luxury architectural aesthetic (DESIGN_SPEC.md)
+ *   - Full Hierarchical Mega-Menu with all 7 Parent Categories and 18+ Subcategory Links
+ *   - Deep-linking to dedicated showcase routes (/pool-and-spa-cover, /thermal-solar-collector, etc.)
+ *     and dynamic category hubs (/category/:slug)
+ *   - Mobile responsive drawer with expandable category accordion
+ *   - "Request Quote" / Consultation CTA
  */
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -22,20 +23,60 @@ import {
   Menu,
   X,
   ChevronDown,
-  Phone,
-  Mail,
-  ArrowRight,
+  ChevronRight,
   Flame,
   Sun,
   Droplets,
-  Wind,
-  Layers
+  Layers,
+  ArrowRight,
+  Sparkles,
+  ShieldCheck,
+  Zap,
+  Gauge,
+  FolderTree
 } from 'lucide-react';
+
+// Category Icon Mapping
+const CATEGORY_ICONS = {
+  'hot-water-heat-pump': Flame,
+  'solar-water-heaters': Sun,
+  'pool-and-spa': Droplets,
+  'hot-water-storage-tanks': Layers,
+  'heaters': Zap,
+  'radiator-and-fancoil': Gauge,
+  'others': Sparkles
+};
+
+// Route resolver matching legacy & showcase routing
+function resolveCategoryHref(slug, isParent = false) {
+  if (!slug) return '/categories';
+  
+  // Dedicated showcase pages
+  const showcaseMap = {
+    'pool-and-spa-cover': '/pool-and-spa-cover',
+    'pool-pumps': '/pool-pumps',
+    'pool-pump': '/pool-pumps',
+    'robotic-pool-cleaner': '/robotic-pool-cleaner',
+    'dehumidifier': '/dehumidifier',
+    'hot-water-storage-tank': '/hot-water-storage-tank',
+    'modular-panel-tank': '/modular-panel-tank',
+    'thermal-solar-collector': '/thermal-solar-collector',
+    'pressurized-thermosiphon': '/pressurized-thermosiphon',
+    'radiator-and-fancoil': '/radiator-and-fancoil',
+    'glass-lined-tanks': '/glass-lined-tanks',
+    'heat-pump-air-dryer': '/heat-pump-air-dryer'
+  };
+
+  if (showcaseMap[slug]) return showcaseMap[slug];
+  return `/category/${slug}`;
+}
 
 export default function Header({ categories = [] }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const dropdownTimeoutRef = useRef(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -44,20 +85,30 @@ export default function Header({ categories = [] }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: 'HOME', href: '/' },
-    { label: 'ABOUT', href: '/about' },
-    { label: 'FAQS', href: '/faqs' },
-    { label: 'CONTACT', href: '/contact' },
-  ];
+  // Close dropdown on route change
+  useEffect(() => {
+    setProductsOpen(false);
+    setMobileOpen(false);
+  }, [pathname]);
+
+  const handleMouseEnter = () => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setProductsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setProductsOpen(false);
+    }, 150);
+  };
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-[#222222] py-3.5 shadow-2xl'
-            : 'bg-gradient-to-b from-[#0A0A0A]/95 to-transparent py-5'
+            ? 'bg-[#0A0A0A]/95 backdrop-blur-xl border-b border-[#222222] py-3.5 shadow-2xl'
+            : 'bg-gradient-to-b from-[#0A0A0A]/95 via-[#0A0A0A]/60 to-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -85,48 +136,93 @@ export default function Header({ categories = [] }) {
               HOME
             </Link>
 
-            {/* Products Dropdown */}
+            {/* Hierarchical Mega-Menu Dropdown */}
             <div
               className="relative group py-2"
-              onMouseEnter={() => setProductsOpen(true)}
-              onMouseLeave={() => setProductsOpen(false)}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <button
-                className="flex items-center space-x-1 text-xs font-semibold tracking-widest uppercase text-neutral-300 transition-colors hover:text-[#C5A880]"
+                className={`flex items-center space-x-1.5 text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+                  pathname.startsWith('/category') || pathname.startsWith('/products') ? 'text-[#C5A880]' : 'text-neutral-300'
+                }`}
+                aria-expanded={productsOpen}
               >
                 <span>THERMAL SOLUTIONS</span>
-                <ChevronDown className="h-3.5 w-3.5 opacity-70 transition-transform group-hover:rotate-180" />
+                <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${productsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
               </button>
 
-              {/* Mega Dropdown Panel */}
+              {/* Full-Width Hierarchical Mega Dropdown Panel */}
               {productsOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[540px] rounded-2xl border border-[#262626] bg-[#121212]/95 backdrop-blur-2xl p-5 shadow-2xl animate-fadeIn">
-                  <div className="grid grid-cols-2 gap-3">
-                    {categories.slice(0, 6).map(c => (
-                      <Link
-                        key={c.id}
-                        href={`/#categories`}
-                        className="group/item flex items-start space-x-3 rounded-xl border border-[#1E1E1E] bg-[#161616] p-3 transition-all hover:border-[#C5A880]/50 hover:bg-[#1A1A1A]"
-                      >
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#C5A880]/10 text-[#C5A880] group-hover/item:bg-[#C5A880] group-hover/item:text-[#0A0A0A] transition-colors">
-                          <Flame className="h-4 w-4" />
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[980px] max-w-[95vw] rounded-3xl border border-[#2B2B2B] bg-[#111111]/98 backdrop-blur-2xl p-7 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)] animate-fadeIn z-50">
+                  <div className="grid grid-cols-3 gap-6 lg:gap-8">
+                    {categories.map((cat) => {
+                      const IconComp = CATEGORY_ICONS[cat.slug] || FolderTree;
+                      const hasSubs = cat.subCategory && cat.subCategory.length > 0;
+                      const parentHref = resolveCategoryHref(cat.slug, true);
+
+                      return (
+                        <div key={cat.slug || cat.id} className="space-y-3">
+                          {/* Parent Category Header Link */}
+                          <Link
+                            href={parentHref}
+                            className="group/parent flex items-center space-x-2.5 pb-2 border-b border-[#222222] transition-colors"
+                          >
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
+                              <IconComp className="h-4 w-4" />
+                            </div>
+                            <span className="text-xs font-bold text-white uppercase tracking-wide group-hover/parent:text-[#C5A880] transition-colors line-clamp-1">
+                              {cat.title}
+                            </span>
+                          </Link>
+
+                          {/* Subcategories List */}
+                          {hasSubs ? (
+                            <ul className="space-y-1.5 pl-1">
+                              {cat.subCategory.map((sub) => {
+                                const subHref = resolveCategoryHref(sub.slug, false);
+                                return (
+                                  <li key={sub.slug || sub.id}>
+                                    <Link
+                                      href={subHref}
+                                      className="group/sub flex items-center justify-between py-1 px-2 rounded-lg text-[11px] text-neutral-400 hover:text-white hover:bg-[#1A1A1A] transition-all"
+                                    >
+                                      <span className="line-clamp-1 group-hover/sub:text-[#C5A880] transition-colors">
+                                        {sub.title}
+                                      </span>
+                                      <ChevronRight className="h-3 w-3 text-neutral-600 group-hover/sub:text-[#C5A880] group-hover/sub:translate-x-0.5 transition-all shrink-0 ml-1 opacity-0 group-hover/sub:opacity-100" />
+                                    </Link>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          ) : (
+                            <div className="py-1 px-2">
+                              <Link
+                                href={parentHref}
+                                className="inline-flex items-center space-x-1 text-[11px] text-[#C5A880] hover:underline"
+                              >
+                                <span>Explore {cat.title} models</span>
+                                <ArrowRight className="h-3 w-3" />
+                              </Link>
+                            </div>
+                          )}
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-white group-hover/item:text-[#C5A880] transition-colors">
-                            {c.title}
-                          </p>
-                          <p className="text-[10px] text-neutral-500 line-clamp-1 mt-0.5">
-                            {c.product_count ? `${c.product_count} models` : 'Inverter & High-efficiency'}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
+                      );
+                    })}
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-[#1F1F1F] flex items-center justify-between text-[11px]">
-                    <span className="text-neutral-400">German-engineered heating & cooling</span>
-                    <Link href="/#categories" className="text-[#C5A880] font-bold flex items-center space-x-1 hover:underline">
-                      <span>Explore all equipment</span>
+                  {/* Mega-Menu Footer Bar */}
+                  <div className="mt-6 pt-4 border-t border-[#1F1F1F] flex items-center justify-between text-xs">
+                    <div className="flex items-center space-x-2 text-neutral-400 text-[11px]">
+                      <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
+                      <span>Certified German Engineering & Sub-Zero Himalayan Testing</span>
+                    </div>
+                    <Link
+                      href="/categories"
+                      className="inline-flex items-center space-x-1.5 rounded-full bg-[#1A1A1A] hover:bg-[#C5A880] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all"
+                    >
+                      <span>Full Equipment Catalogue</span>
                       <ArrowRight className="h-3 w-3" />
                     </Link>
                   </div>
@@ -141,6 +237,15 @@ export default function Header({ categories = [] }) {
               }`}
             >
               ABOUT US
+            </Link>
+
+            <Link
+              href="/blogs"
+              className={`text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+                pathname.startsWith('/blog') ? 'text-[#C5A880]' : 'text-neutral-300'
+              }`}
+            >
+              BLOGS
             </Link>
 
             <Link
@@ -166,7 +271,7 @@ export default function Header({ categories = [] }) {
           <div className="hidden lg:flex items-center space-x-4">
             <Link
               href="/contact"
-              className="relative inline-flex items-center space-x-2 rounded-lg bg-[#C5A880] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] transition-all hover:bg-[#D4B890] shadow-md shadow-[#C5A880]/15 group"
+              className="relative inline-flex items-center space-x-2 rounded-xl bg-[#C5A880] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] transition-all hover:bg-[#D4B890] shadow-md shadow-[#C5A880]/15 group"
             >
               <span>Request Quote</span>
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -186,52 +291,96 @@ export default function Header({ categories = [] }) {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl lg:hidden p-6 flex flex-col justify-between animate-fadeIn">
-          <div className="flex items-center justify-between border-b border-[#222222] pb-4">
-            <div className="relative h-8 w-32">
-              <Image src="/images/logo-white.png" alt="Innmotek" fill className="object-contain object-left" />
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl lg:hidden p-6 flex flex-col justify-between animate-fadeIn overflow-y-auto">
+          <div>
+            <div className="flex items-center justify-between border-b border-[#222222] pb-4">
+              <div className="relative h-8 w-32">
+                <Image src="/images/logo-white.png" alt="Innmotek" fill className="object-contain object-left" />
+              </div>
+              <button onClick={() => setMobileOpen(false)} className="rounded-lg p-2 text-neutral-400 hover:text-white">
+                <X className="h-6 w-6" />
+              </button>
             </div>
-            <button onClick={() => setMobileOpen(false)} className="rounded-lg p-2 text-neutral-400 hover:text-white">
-              <X className="h-6 w-6" />
-            </button>
-          </div>
 
-          <div className="py-8 space-y-6">
-            <Link
-              href="/"
-              onClick={() => setMobileOpen(false)}
-              className="block text-xl font-bold tracking-tight text-white hover:text-[#C5A880]"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              onClick={() => setMobileOpen(false)}
-              className="block text-xl font-bold tracking-tight text-white hover:text-[#C5A880]"
-            >
-              About Innmotek
-            </Link>
-            <Link
-              href="/#categories"
-              onClick={() => setMobileOpen(false)}
-              className="block text-xl font-bold tracking-tight text-white hover:text-[#C5A880]"
-            >
-              Thermal Solutions
-            </Link>
-            <Link
-              href="/faqs"
-              onClick={() => setMobileOpen(false)}
-              className="block text-xl font-bold tracking-tight text-white hover:text-[#C5A880]"
-            >
-              FAQs & Guidance
-            </Link>
-            <Link
-              href="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="block text-xl font-bold tracking-tight text-white hover:text-[#C5A880]"
-            >
-              Contact & Inquiries
-            </Link>
+            <div className="py-6 space-y-4">
+              <Link
+                href="/"
+                onClick={() => setMobileOpen(false)}
+                className="block text-lg font-bold tracking-tight text-white hover:text-[#C5A880]"
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                onClick={() => setMobileOpen(false)}
+                className="block text-lg font-bold tracking-tight text-white hover:text-[#C5A880]"
+              >
+                About Innmotek
+              </Link>
+
+              {/* Mobile Thermal Solutions Accordion */}
+              <div>
+                <button
+                  onClick={() => setMobileSolutionsOpen(!mobileSolutionsOpen)}
+                  className="flex w-full items-center justify-between text-lg font-bold tracking-tight text-white hover:text-[#C5A880] py-1"
+                >
+                  <span>Thermal Solutions</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${mobileSolutionsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
+                </button>
+
+                {mobileSolutionsOpen && (
+                  <div className="mt-3 space-y-4 pl-3 border-l border-[#2B2B2B] text-sm">
+                    {categories.map((cat) => (
+                      <div key={cat.slug} className="space-y-1.5">
+                        <Link
+                          href={resolveCategoryHref(cat.slug, true)}
+                          onClick={() => setMobileOpen(false)}
+                          className="block font-bold text-xs uppercase tracking-wider text-[#C5A880]"
+                        >
+                          {cat.title}
+                        </Link>
+                        {cat.subCategory && cat.subCategory.length > 0 && (
+                          <div className="space-y-1 pl-2">
+                            {cat.subCategory.map((sub) => (
+                              <Link
+                                key={sub.slug}
+                                href={resolveCategoryHref(sub.slug, false)}
+                                onClick={() => setMobileOpen(false)}
+                                className="block text-xs text-neutral-400 hover:text-white py-0.5"
+                              >
+                                {sub.title}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Link
+                href="/blogs"
+                onClick={() => setMobileOpen(false)}
+                className="block text-lg font-bold tracking-tight text-white hover:text-[#C5A880]"
+              >
+                Blogs & Insights
+              </Link>
+              <Link
+                href="/faqs"
+                onClick={() => setMobileOpen(false)}
+                className="block text-lg font-bold tracking-tight text-white hover:text-[#C5A880]"
+              >
+                FAQs & Guidance
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileOpen(false)}
+                className="block text-lg font-bold tracking-tight text-white hover:text-[#C5A880]"
+              >
+                Contact & Inquiries
+              </Link>
+            </div>
           </div>
 
           <div className="border-t border-[#222222] pt-6 space-y-4">
