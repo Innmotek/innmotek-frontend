@@ -6,10 +6,23 @@
  */
 
 import './globals.css';
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Header from '@/components/layout/header';
 import SideRail from '@/components/layout/side-rail';
 import Footer from '@/components/layout/footer';
 import { getCategories } from '@/lib/api';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Innmotek | Advanced Thermal Technology & Heat Pump Systems',
@@ -31,8 +44,8 @@ export default async function RootLayout({ children }) {
   const categories = await getCategories();
 
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className="bg-[#0A0A0A] text-white min-h-screen flex flex-col antialiased selection:bg-[#C5A880] selection:text-[#0A0A0A]">
+    <html lang="en" className={`dark scroll-smooth ${inter.variable} ${plusJakartaSans.variable}`}>
+      <body className="bg-[#0A0A0A] text-white font-sans min-h-screen flex flex-col antialiased selection:bg-[#C5A880] selection:text-[#0A0A0A]">
         {/* Navigation Bar */}
         <Header categories={categories} />
 

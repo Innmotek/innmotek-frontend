@@ -77,3 +77,157 @@ body {
 .gold-glow {
   box-shadow: 0 0 35px -5px rgba(197, 168, 128, 0.25);
 }
+
+/* CMS Content & Dynamic Page Styles */
+.cms-content h2 {
+  font-family: var(--font-display), 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+.cms-content p {
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #B3B3B3;
+  margin-bottom: 1rem;
+}
+.cms-content .checklist {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.cms-content .checklist li {
+  position: relative;
+  padding-left: 1.75rem;
+  font-size: 0.875rem;
+  color: #E5E5E5;
+}
+.cms-content .checklist li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #C5A880;
+  font-weight: bold;
+}
+.cms-content .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+.cms-content .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+.cms-content .card {
+  background: #141414;
+  border: 1px solid #262626;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+.cms-content .card:hover {
+  border-color: #C5A880;
+  box-shadow: 0 10px 30px -10px rgba(197, 168, 128, 0.2);
+}
+.cms-content .card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.cms-content .badge-gold {
+  display: inline-block;
+  background: rgba(197, 168, 128, 0.12);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  color: #C5A880;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Product CMS Typography Normalization (Harmonizes fonts & overrides legacy inline Helvetica styles) */
+.product-cms-summary,
+.product-cms-summary *,
+.product-cms-description,
+.product-cms-description * {
+  font-family: var(--font-sans), 'Inter', system-ui, sans-serif !important;
+}
+
+.product-cms-summary span,
+.product-cms-summary li,
+.product-cms-summary p {
+  font-size: 0.75rem !important; /* 12px */
+  line-height: 1.6 !important;
+  color: #D4D4D8 !important;
+}
+
+.product-cms-description p,
+.product-cms-description li {
+  font-size: 0.875rem !important; /* 14px */
+  line-height: 1.8 !important;
+  color: #D4D4D8;
+  margin-bottom: 0.85rem;
+}
+
+.product-cms-description span {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.product-cms-description strong,
+.product-cms-description b {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+/* Headings & Prominent Section Sub-Headlines */
+.product-cms-description h1,
+.product-cms-description h2,
+.product-cms-description h3,
+.product-cms-description h4,
+.product-cms-description h1 *,
+.product-cms-description h2 *,
+.product-cms-description h3 *,
+.product-cms-description h4 *,
+.product-cms-description strong[style*="font-size"],
+.product-cms-description strong[style*="font-size"] *,
+.product-cms-description span[style*="font-size: 24px"],
+.product-cms-description span[style*="font-size: 24px"] *,
+.product-cms-description span[style*="font-size: 30px"],
+.product-cms-description span[style*="font-size: 30px"] *,
+.product-cms-description > p:first-of-type > strong,
+.product-cms-description > p:first-of-type > span > strong {
+  font-family: var(--font-display), 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  line-height: 1.4 !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 1.25rem !important;
+  display: block !important;
+}
+
+.product-cms-description ul {
+  list-style-type: disc !important;
+  padding-left: 1.25rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.product-cms-description li {
+  margin-bottom: 0.35rem !important;
+}

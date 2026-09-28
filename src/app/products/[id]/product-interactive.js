@@ -75,11 +75,11 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
       {/* =========================================================================
           SECTION 1: PATTERN 5 GALLERY & INFO SPLIT
           ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
         {/* Left: Interactive Media Gallery (7 cols) */}
-        <div className="lg:col-span-7 space-y-4">
+        <div className="lg:col-span-7 h-full flex flex-col justify-between space-y-4">
           {/* Main Visual Display */}
-          <div className="relative h-[380px] sm:h-[480px] w-full rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden shadow-2xl flex items-center justify-center">
+          <div className="relative flex-1 min-h-[380px] sm:min-h-[440px] w-full rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden shadow-2xl flex items-center justify-center p-6">
             {activeImage ? (
               <Image
                 src={activeImage}
@@ -95,16 +95,11 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
                 <span className="text-xs uppercase tracking-wider">Product Visual</span>
               </div>
             )}
-            <div className="absolute top-4 right-4">
-              <span className="inline-flex items-center rounded-full bg-black/70 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#C5A880] border border-[#C5A880]/30">
-                Innmotek Certified
-              </span>
-            </div>
           </div>
 
           {/* Thumbnail Strip (Rendered only if multiple images exist) */}
           {allImages.length > 1 && (
-            <div className="flex items-center space-x-3 overflow-x-auto pb-2 scrollbar-none">
+            <div className="flex items-center space-x-3 overflow-x-auto pb-2 scrollbar-none shrink-0">
               {allImages.map((img, idx) => (
                 <button
                   key={idx}
@@ -129,41 +124,43 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
         </div>
 
         {/* Right: Equipment Specifications & Inquiry (5 cols) */}
-        <div className="lg:col-span-5 rounded-3xl border border-[#222222] bg-[#121212] p-8 space-y-6 shadow-xl">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <span className="inline-flex items-center space-x-1.5 text-[10px] font-bold uppercase tracking-widest text-[#C5A880]">
-                <Sparkles className="h-3 w-3" />
-                <span>Thermal Engineering</span>
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white font-display">
-              {product.title}
-            </h1>
-          </div>
-
-          {/* Summary / Highlights */}
-          {product.summary && (
-            <div className="rounded-2xl border border-[#222222] bg-[#171717] p-4 text-xs text-neutral-300 leading-relaxed">
-              <SafeHtml
-                className="prose prose-invert prose-xs max-w-none [&>ul]:list-disc [&>ul]:pl-4 [&>ul]:space-y-1"
-                html={product.summary}
-              />
-            </div>
-          )}
-
-          {/* Key Value Proposition Badges */}
-          <div className="space-y-2.5 pt-1 text-xs">
-            {[
-              'Direct factory warranty and genuine parts guarantee',
-              'High COP thermodynamic performance across extreme temperatures',
-              'Comprehensive sizing, CFD analysis & installation support'
-            ].map((text, i) => (
-              <div key={i} className="flex items-start space-x-2.5 text-neutral-300">
-                <CheckCircle2 className="h-4 w-4 text-[#C5A880] shrink-0 mt-0.5" />
-                <span>{text}</span>
+        <div className="lg:col-span-5 h-full rounded-3xl border border-[#222222] bg-[#121212] p-8 shadow-xl flex flex-col justify-between">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <span className="inline-flex items-center space-x-1.5 text-[10px] font-bold uppercase tracking-widest text-[#C5A880]">
+                  <Sparkles className="h-3 w-3" />
+                  <span>Thermal Engineering</span>
+                </span>
               </div>
-            ))}
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white font-display">
+                {product.title}
+              </h1>
+            </div>
+
+            {/* Summary / Highlights */}
+            {product.summary && (
+              <div className="rounded-2xl border border-[#222222] bg-[#171717] p-4 text-xs text-neutral-300 leading-relaxed">
+                <SafeHtml
+                  className="product-cms-summary max-w-none [&>ul]:list-disc [&>ul]:pl-4 [&>ul]:space-y-1"
+                  html={product.summary}
+                />
+              </div>
+            )}
+
+            {/* Key Value Proposition Badges */}
+            <div className="space-y-2.5 pt-1 text-xs">
+              {[
+                'Direct factory warranty and genuine parts guarantee',
+                'High COP thermodynamic performance across extreme temperatures',
+                'Comprehensive sizing, CFD analysis & installation support'
+              ].map((text, i) => (
+                <div key={i} className="flex items-start space-x-2.5 text-neutral-300">
+                  <CheckCircle2 className="h-4 w-4 text-[#C5A880] shrink-0 mt-0.5" />
+                  <span>{text}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Action CTAs */}
@@ -196,7 +193,7 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
             <h2 className="text-xl font-bold text-white font-display">Product Overview & Features</h2>
           </div>
           <SafeHtml
-            className="text-xs sm:text-sm text-neutral-300 leading-relaxed prose prose-invert max-w-none [&>p]:mb-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ul>li]:mb-1 [&>strong]:text-white [&>h3]:text-white [&>h4]:text-white"
+            className="product-cms-description text-neutral-300 leading-relaxed max-w-none"
             html={product.description}
           />
         </div>
@@ -301,41 +298,45 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {relatedProducts.slice(0, 4).map((rel) => (
-              <div
-                key={rel.slug}
-                className="group rounded-2xl border border-[#222222] bg-[#121212] overflow-hidden flex flex-col justify-between hover:border-[#C5A880] transition-all shadow-lg"
-              >
-                <div className="relative h-48 w-full bg-[#181818] overflow-hidden">
-                  {rel.image ? (
-                    <Image
-                      src={rel.image}
-                      alt={rel.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-neutral-700">
-                      <Layers className="h-8 w-8" />
-                    </div>
-                  )}
-                </div>
+            {relatedProducts.slice(0, 4).map((rel) => {
+              const relRawSlug = (rel.slug || rel.id || '').toString().trim();
+              const relCleanSlug = relRawSlug.replace(/^\/+products\/+/, '').replace(/^\/+/, '');
+              const relHref = `/products/${relCleanSlug}`;
 
-                <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                  <h3 className="text-xs font-bold text-white group-hover:text-[#C5A880] transition-colors line-clamp-2">
-                    {rel.title}
-                  </h3>
-                  <Link
-                    href={`/products/${rel.slug}`}
-                    className="inline-flex items-center space-x-1 text-[11px] font-bold text-[#C5A880] uppercase tracking-wider pt-2 hover:underline"
-                  >
-                    <span>Specifications</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-            ))}
+              return (
+                <Link
+                  key={rel.slug || rel.id}
+                  href={relHref}
+                  className="group rounded-2xl border border-[#222222] bg-[#121212] overflow-hidden flex flex-col justify-between hover:border-[#C5A880] transition-all duration-300 shadow-lg cursor-pointer hover:shadow-[0_10px_30px_rgba(197,168,128,0.15)]"
+                >
+                  <div className="relative h-48 w-full bg-[#181818] overflow-hidden">
+                    {rel.image ? (
+                      <Image
+                        src={rel.image}
+                        alt={rel.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-neutral-700">
+                        <Layers className="h-8 w-8" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
+                    <h3 className="text-xs font-bold text-white group-hover:text-[#C5A880] transition-colors line-clamp-2">
+                      {rel.title}
+                    </h3>
+                    <div className="inline-flex items-center space-x-1 text-[11px] font-bold text-[#C5A880] uppercase tracking-wider pt-2 group-hover:underline">
+                      <span>Specifications</span>
+                      <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}

@@ -62,9 +62,17 @@ export function extractQuickSpecs(product) {
 export default function ProductCard({ product, priority = false }) {
   if (!product) return null;
   const quickSpecs = extractQuickSpecs(product);
+  
+  // Sanitize slug to prevent duplicate /products/ segments
+  const rawSlug = (product.slug || product.id || '').toString().trim();
+  const cleanSlug = rawSlug.replace(/^\/+products\/+/, '').replace(/^\/+/, '');
+  const productHref = `/products/${cleanSlug}`;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden transition-all duration-300 hover:border-[#C5A880] shadow-xl hover:shadow-[0_10px_30px_-10px_rgba(197,168,128,0.15)]">
+    <Link
+      href={productHref}
+      className="group relative flex flex-col justify-between rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden transition-all duration-300 hover:border-[#C5A880] shadow-xl hover:shadow-[0_12px_35px_-10px_rgba(197,168,128,0.2)] cursor-pointer"
+    >
       {/* Product Image Container */}
       <div className="relative h-64 sm:h-72 w-full bg-[#181818] overflow-hidden">
         {product.image ? (
@@ -141,17 +149,14 @@ export default function ProductCard({ product, priority = false }) {
           )}
         </div>
 
-        {/* Action Button */}
+        {/* Action Button Strip */}
         <div className="pt-4 border-t border-[#1F1F1F]">
-          <Link
-            href={`/products/${product.slug}`}
-            className="flex items-center justify-between rounded-xl bg-[#1A1A1A] hover:bg-[#C5A880] p-3 text-[#C5A880] hover:text-[#0A0A0A] font-bold text-xs uppercase tracking-wider transition-all duration-300 group/btn shadow-sm"
-          >
+          <div className="flex items-center justify-between rounded-xl bg-[#1A1A1A] group-hover:bg-[#C5A880] p-3 text-[#C5A880] group-hover:text-[#0A0A0A] font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-sm">
             <span>View Specifications</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-          </Link>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

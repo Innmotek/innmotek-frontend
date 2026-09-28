@@ -44,8 +44,8 @@ export default function Footer({ categories = [] }) {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-white uppercase tracking-wider">German Engineering</p>
-              <p className="text-[11px] text-neutral-400">Built to European thermal certification standards</p>
+              <p className="text-xs font-bold text-white uppercase tracking-wider">Precision Engineering</p>
+              <p className="text-[11px] text-neutral-400">Built to international thermodynamic certification standards</p>
             </div>
           </div>
 
@@ -76,7 +76,7 @@ export default function Footer({ categories = [] }) {
               <div className="flex items-start space-x-2.5 text-neutral-300">
                 <MapPin className="h-4 w-4 text-[#C5A880] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-white">India Hub: GIDA, Uttar Pradesh, 273209</p>
+                  <p className="font-semibold text-white">India Hub: GIDA, Gorakhpur, UP, 273209</p>
                   <p className="text-neutral-500 text-[11px]">UAE Hub: Meydan Road, Nad Al Sheba, Dubai</p>
                 </div>
               </div>
@@ -93,12 +93,31 @@ export default function Footer({ categories = [] }) {
                 <a href="mailto:info@innmotek.com" className="hover:text-white transition-colors">info@innmotek.com</a>
               </div>
             </div>
+
+            {/* Directions Map Link (Universal Navigation) */}
+            <div className="pt-2">
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=26.7398709,83.2307286"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center space-x-2.5 rounded-xl border border-[#2B2B2B] bg-[#141414] hover:bg-[#1A1A1A] hover:border-[#C5A880] p-2.5 transition-all text-xs text-neutral-300 hover:text-white"
+              >
+                <div className="h-7 w-7 rounded-lg bg-[#C5A880]/15 flex items-center justify-center text-[#C5A880] shrink-0">
+                  <MapPin className="h-3.5 w-3.5" />
+                </div>
+                <div className="text-[11px] leading-tight">
+                  <p className="font-bold text-white group-hover:text-[#C5A880] transition-colors">Innmotek LLP — Get Directions</p>
+                  <p className="text-neutral-500">Open navigation in Maps</p>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-neutral-500 group-hover:text-[#C5A880] group-hover:translate-x-0.5 transition-all ml-1" />
+              </a>
+            </div>
           </div>
 
           {/* Col 2: Solutions */}
           <div>
             <h4 className="text-[11px] font-bold uppercase tracking-widest text-[#C5A880] mb-4">
-              Thermal Systems
+              Products
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>

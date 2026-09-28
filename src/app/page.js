@@ -23,6 +23,7 @@ import {
   getBrands,
   getBlogs
 } from '@/lib/api';
+import ThermatecCarousel from '@/components/home/thermatec-carousel';
 import {
   ArrowRight,
   Zap,
@@ -132,70 +133,29 @@ export default async function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 2: PHOTO-FIRST CATEGORY GRID (Pattern 4)
+          SECTION 2: THERMATEC-STYLE CATEGORY SLIDER WITH AUTO-SCROLL
           ========================================================================= */}
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#222222] pb-6">
           <div className="space-y-2">
             <span className="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">
-              Equipment Taxonomy
+              Commercial & Residential Systems
             </span>
             <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white font-display">
-              Engineered Thermal Solutions
+              Our Products
             </h2>
           </div>
           <Link
             href="/category"
             className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-[#C5A880] hover:text-[#D4B890] transition-colors"
           >
-            <span>View Full Taxonomy</span>
+            <span>View All Categories</span>
             <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((c) => {
-            const catImage = c.image || 'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/categories/9a01b0f1-4db5-45cf-a3fe-8924b1a45749.webp';
-            const catHref = `/category/${c.slug}`;
-
-            return (
-              <Link
-                key={c.id || c.slug}
-                href={catHref}
-                className="group relative h-80 rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden transition-all duration-500 hover:border-[#C5A880] shadow-xl hover:shadow-[0_10px_30px_-10px_rgba(197,168,128,0.2)] flex flex-col justify-end"
-              >
-                {/* Background Image */}
-                <Image
-                  src={catImage}
-                  alt={c.title}
-                  fill
-                  className="object-cover object-center transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-                  unoptimized
-                />
-
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent" />
-
-                {/* Pinned Bottom Label Bar */}
-                <div className="relative z-10 p-6 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-white group-hover:text-[#C5A880] transition-colors line-clamp-1">
-                      {c.title}
-                    </h3>
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white group-hover:bg-[#C5A880] group-hover:text-[#0A0A0A] transition-all">
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                    </div>
-                  </div>
-                  <p className="text-xs text-neutral-300 line-clamp-1">
-                    {c.subCategory && c.subCategory.length > 0
-                      ? `${c.subCategory.length} sub-specialties available`
-                      : 'Commercial & Residential Systems'}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        {/* Interactive Horizontal Category Slider */}
+        <ThermatecCarousel categories={categories} />
       </section>
 
       {/* =========================================================================
@@ -341,7 +301,7 @@ export default async function HomePage() {
               <div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/40 bg-[#0A0A0A] px-3.5 py-1">
                 <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
                 <span className="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">
-                  German Engineering Standard
+                  Industrial Engineering Standard
                 </span>
               </div>
 

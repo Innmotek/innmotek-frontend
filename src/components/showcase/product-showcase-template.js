@@ -346,53 +346,57 @@ export default function ProductShowcaseTemplate({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categoryProducts.map((prod) => (
-                <div
-                  key={prod.slug || prod.id}
-                  className="group rounded-2xl border border-[#222222] bg-[#121212] overflow-hidden flex flex-col justify-between hover:border-[#C5A880] transition-all shadow-xl"
-                >
-                  <div className="relative h-56 w-full bg-[#161616] overflow-hidden">
-                    {prod.image ? (
-                      <Image
-                        src={prod.image}
-                        alt={prod.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-neutral-700">
-                        <Layers className="h-10 w-10" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent" />
-                  </div>
+              {categoryProducts.map((prod) => {
+                const prodRawSlug = (prod.slug || prod.id || '').toString().trim();
+                const prodCleanSlug = prodRawSlug.replace(/^\/+products\/+/, '').replace(/^\/+/, '');
+                const prodHref = `/products/${prodCleanSlug}`;
 
-                  <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-sm font-bold text-white group-hover:text-[#C5A880] transition-colors">
-                        {prod.title}
-                      </h3>
-                      {prod.summary && (
-                        <SafeHtml
-                          className="text-xs text-neutral-400 line-clamp-2 mt-1.5"
-                          html={prod.summary}
+                return (
+                  <Link
+                    key={prod.slug || prod.id}
+                    href={prodHref}
+                    className="group rounded-2xl border border-[#222222] bg-[#121212] overflow-hidden flex flex-col justify-between hover:border-[#C5A880] transition-all duration-300 shadow-xl cursor-pointer hover:shadow-[0_12px_35px_-10px_rgba(197,168,128,0.2)]"
+                  >
+                    <div className="relative h-56 w-full bg-[#161616] overflow-hidden">
+                      {prod.image ? (
+                        <Image
+                          src={prod.image}
+                          alt={prod.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          unoptimized
                         />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-neutral-700">
+                          <Layers className="h-10 w-10" />
+                        </div>
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent" />
                     </div>
 
-                    <div className="pt-3 border-t border-[#1C1C1C]">
-                      <Link
-                        href={`/products/${prod.slug}`}
-                        className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-[#C5A880] group-hover:text-[#D4B890]"
-                      >
-                        <span>Full Specifications</span>
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                      </Link>
+                    <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-sm font-bold text-white group-hover:text-[#C5A880] transition-colors">
+                          {prod.title}
+                        </h3>
+                        {prod.summary && (
+                          <SafeHtml
+                            className="text-xs text-neutral-400 line-clamp-2 mt-1.5"
+                            html={prod.summary}
+                          />
+                        )}
+                      </div>
+
+                      <div className="pt-3 border-t border-[#1C1C1C]">
+                        <div className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-[#C5A880] group-hover:text-[#D4B890]">
+                          <span>Full Specifications</span>
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

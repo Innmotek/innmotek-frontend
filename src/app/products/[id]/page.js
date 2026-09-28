@@ -32,13 +32,21 @@ export default async function ProductDetailPage({ params }) {
 
   return (
     <div className="space-y-8 pt-28 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Breadcrumb Bar */}
+      {/* Complete Breadcrumb Hierarchy (Home > Products > Category > Full Product Name) */}
       <nav className="flex items-center space-x-2 text-[11px] font-mono uppercase tracking-widest text-neutral-400 overflow-x-auto whitespace-nowrap scrollbar-none pb-2">
         <Link href="/" className="hover:text-white transition-colors">Home</Link>
         <ChevronRight className="h-3 w-3 text-neutral-600 shrink-0" />
-        <Link href="/category" className="hover:text-white transition-colors">Categories</Link>
+        <Link href="/category" className="hover:text-white transition-colors">Products</Link>
+        {product.category && (
+          <>
+            <ChevronRight className="h-3 w-3 text-neutral-600 shrink-0" />
+            <Link href={`/category/${product.category.slug}`} className="hover:text-white transition-colors">
+              {product.category.title}
+            </Link>
+          </>
+        )}
         <ChevronRight className="h-3 w-3 text-neutral-600 shrink-0" />
-        <span className="text-[#C5A880] font-bold truncate max-w-xs">{product.title}</span>
+        <span className="text-[#C5A880] font-bold">{product.title}</span>
       </nav>
 
       {/* Product Interactive Core */}

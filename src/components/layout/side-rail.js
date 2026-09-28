@@ -30,7 +30,7 @@ export default function SideRail() {
       {/* Middle Rotated Brand Signature */}
       <div className="rotate-90 origin-center whitespace-nowrap select-none my-auto">
         <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-neutral-500 hover:text-[#C5A880] transition-colors">
-          INNMOTEK THERMAL SYSTEMS
+          HEATING AND COOLING SYSTEMS
         </span>
       </div>
 

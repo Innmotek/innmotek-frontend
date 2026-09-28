@@ -23,7 +23,8 @@ import {
   AlertCircle,
   MessageCircle,
   Building2,
-  Globe2
+  Globe2,
+  ArrowRight
 } from 'lucide-react';
 
 export default function ContactPage() {
@@ -63,9 +64,9 @@ export default function ContactPage() {
       </div>
 
       {/* Pattern 5 Split Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         {/* Left Column: Real Corporate Contact Info across India & Dubai (5 cols) */}
-        <div className="lg:col-span-5 rounded-3xl border border-[#222222] bg-[#121212] p-8 space-y-8 shadow-xl">
+        <div className="lg:col-span-5 h-full rounded-3xl border border-[#222222] bg-[#121212] p-8 sm:p-10 shadow-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center space-x-2 text-[#C5A880] mb-1">
               <Globe2 className="h-4 w-4" />
@@ -143,7 +144,7 @@ export default function ContactPage() {
                 <div>
                   <p className="font-bold text-white uppercase tracking-wider text-[10px]">Direct WhatsApp Hotline</p>
                   <a href="https://wa.me/918081741031" target="_blank" rel="noreferrer" className="text-emerald-300 hover:underline">
-                    +91 808 1741031 (Chat with engineer)
+                    +91 808 1741031
                   </a>
                 </div>
               </div>
@@ -152,11 +153,13 @@ export default function ContactPage() {
         </div>
 
         {/* Right Column: Engineering Sizing & Inquiry Form (7 cols) */}
-        <div className="lg:col-span-7 rounded-3xl border border-[#222222] bg-[#121212] p-8 sm:p-10 shadow-xl">
-          <h2 className="text-xl font-bold text-white mb-1">Request Sizing or Quotation</h2>
-          <p className="text-xs text-neutral-400 mb-6">
-            Fill in your facility or residential heating requirements below. A senior thermal engineer will respond within 24 hours.
-          </p>
+        <div className="lg:col-span-7 h-full rounded-3xl border border-[#222222] bg-[#121212] p-8 sm:p-10 shadow-xl flex flex-col justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-white mb-1">Request Sizing or Quotation</h2>
+            <p className="text-xs text-neutral-400 mb-6">
+              Fill in your facility or residential heating requirements below. A senior thermal engineer will respond within 24 hours.
+            </p>
+          </div>
 
           {submitted ? (
             <div className="rounded-2xl border border-emerald-800/40 bg-emerald-950/30 p-6 text-center space-y-3">
@@ -265,6 +268,47 @@ export default function ContactPage() {
               </button>
             </form>
           )}
+        </div>
+      </div>
+
+      {/* =========================================================================
+          SECTION 3: GOOGLE MAPS EMBED - INNMOTEK HEADQUARTERS & MANUFACTURING HUB
+          Coordinates: 26.7398709, 83.2307286 (GIDA, Gorakhpur, UP)
+          ========================================================================= */}
+      <div className="rounded-3xl border border-[#222222] bg-[#121212] overflow-hidden shadow-2xl">
+        <div className="p-6 sm:p-8 border-b border-[#222222] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">
+              Facility Location
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
+              Innmotek LLP Technical & Manufacturing Facility
+            </h3>
+            <p className="text-xs text-neutral-400 mt-1">
+              GIDA, Gorakhpur, Uttar Pradesh, 273209, India • Coordinates: 26.7398709, 83.2307286
+            </p>
+          </div>
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=26.7398709,83.2307286"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center space-x-2 rounded-xl bg-[#C5A880] hover:bg-[#D4B890] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] transition-all shadow-md shrink-0 self-start sm:self-auto"
+          >
+            <span>Get Directions</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
+        <div className="relative w-full h-[380px] sm:h-[450px] bg-[#181818]">
+          <iframe
+            title="Innmotek Facility Google Map"
+            src="https://maps.google.com/maps?q=26.7398709,83.2307286&hl=en&z=16&output=embed"
+            width="100%"
+            height="100%"
+            style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) contrast(90%)' }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
     </div>

@@ -102,6 +102,74 @@ export default function Header({ categories = [] }) {
     }, 150);
   };
 
+  // 3 balanced columns for compact mega-menu:
+  const col1Slugs = ['hot-water-heat-pump', 'hot-water-storage-tanks'];
+  const col2Slugs = ['solar-water-heaters', 'heaters', 'radiator-and-fancoil'];
+  const col3Slugs = ['pool-and-spa', 'others'];
+
+  const col1Categories = categories.filter((c) => col1Slugs.includes(c.slug));
+  const col2Categories = categories.filter((c) => col2Slugs.includes(c.slug));
+  const col3Categories = categories.filter(
+    (c) =>
+      col3Slugs.includes(c.slug) ||
+      (!col1Slugs.includes(c.slug) && !col2Slugs.includes(c.slug))
+  );
+
+  const renderCategoryItem = (cat) => {
+    const IconComp = CATEGORY_ICONS[cat.slug] || FolderTree;
+    const hasSubs = cat.subCategory && cat.subCategory.length > 0;
+    const parentHref = resolveCategoryHref(cat.slug, true);
+
+    return (
+      <div key={cat.slug || cat.id} className="space-y-1.5">
+        {/* Parent Category Header Link */}
+        <Link
+          href={parentHref}
+          className="group/parent flex items-center space-x-2 pb-1.5 border-b border-[#242424] transition-colors"
+        >
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
+            <IconComp className="h-3 w-3" />
+          </div>
+          <span className="text-[11px] font-bold text-white uppercase tracking-wide group-hover/parent:text-[#C5A880] transition-colors line-clamp-1">
+            {cat.title}
+          </span>
+        </Link>
+
+        {/* Subcategories List */}
+        {hasSubs ? (
+          <ul className="space-y-0.5">
+            {cat.subCategory.map((sub) => {
+              const subHref = resolveCategoryHref(sub.slug, false);
+              return (
+                <li key={sub.slug || sub.id}>
+                  <Link
+                    href={subHref}
+                    className="group/sub flex items-center justify-between py-1 px-2 rounded-md text-[10.5px] text-neutral-300 hover:text-white hover:bg-[#1E1E1E] transition-all"
+                  >
+                    <span className="line-clamp-1 group-hover/sub:text-[#C5A880] transition-colors">
+                      {sub.title}
+                    </span>
+                    <ChevronRight className="h-2.5 w-2.5 text-neutral-600 group-hover/sub:text-[#C5A880] group-hover/sub:translate-x-0.5 transition-all shrink-0 ml-1 opacity-0 group-hover/sub:opacity-100" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <div className="py-1 px-2">
+            <Link
+              href={parentHref}
+              className="inline-flex items-center space-x-1 text-[10.5px] text-[#C5A880] hover:underline"
+            >
+              <span>Explore {cat.title} models</span>
+              <ArrowRight className="h-2.5 w-2.5" />
+            </Link>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
       <header
@@ -129,7 +197,9 @@ export default function Header({ categories = [] }) {
           <nav className="hidden lg:flex items-center space-x-8">
             <Link
               href="/"
-              className={`text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+              className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
+                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+              } ${
                 pathname === '/' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
             >
@@ -144,99 +214,82 @@ export default function Header({ categories = [] }) {
             >
               <button
                 className={`flex items-center space-x-1.5 text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
-                  pathname.startsWith('/category') || pathname.startsWith('/products') ? 'text-[#C5A880]' : 'text-neutral-300'
+                  pathname.startsWith('/category') || pathname.startsWith('/products') || productsOpen ? 'text-[#C5A880]' : 'text-neutral-300'
                 }`}
                 aria-expanded={productsOpen}
               >
-                <span>THERMAL SOLUTIONS</span>
+                <span>PRODUCTS</span>
                 <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${productsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
               </button>
 
-              {/* Full-Width Hierarchical Mega Dropdown Panel (100% Solid Backdrop - No Bleed-through) */}
+              {/* Full-Width Hierarchical Mega Dropdown Panel */}
               {productsOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[1000px] max-w-[95vw] rounded-3xl border border-[#2E2E2E] bg-gradient-to-b from-[#181818] via-[#131313] to-[#0E0E0E] p-8 shadow-[0_35px_90px_rgba(0,0,0,0.98)] ring-1 ring-white/10 animate-fadeIn z-[100] relative overflow-hidden">
-                  {/* Subtle Ambient Top Glow */}
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute -top-24 left-1/3 w-80 h-80 bg-[#C5A880]/[0.03] rounded-full blur-3xl pointer-events-none" />
-
-                  <div className="relative z-10 grid grid-cols-3 gap-6 lg:gap-8">
-                    {categories.map((cat) => {
-                      const IconComp = CATEGORY_ICONS[cat.slug] || FolderTree;
-                      const hasSubs = cat.subCategory && cat.subCategory.length > 0;
-                      const parentHref = resolveCategoryHref(cat.slug, true);
-
-                      return (
-                        <div key={cat.slug || cat.id} className="space-y-3">
-                          {/* Parent Category Header Link */}
-                          <Link
-                            href={parentHref}
-                            className="group/parent flex items-center space-x-2.5 pb-2 border-b border-[#242424] transition-colors"
-                          >
-                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
-                              <IconComp className="h-4 w-4" />
-                            </div>
-                            <span className="text-xs font-bold text-white uppercase tracking-wide group-hover/parent:text-[#C5A880] transition-colors line-clamp-1">
-                              {cat.title}
-                            </span>
-                          </Link>
-
-                          {/* Subcategories List */}
-                          {hasSubs ? (
-                            <ul className="space-y-1.5 pl-1">
-                              {cat.subCategory.map((sub) => {
-                                const subHref = resolveCategoryHref(sub.slug, false);
-                                return (
-                                  <li key={sub.slug || sub.id}>
-                                    <Link
-                                      href={subHref}
-                                      className="group/sub flex items-center justify-between py-1 px-2 rounded-lg text-[11px] text-neutral-400 hover:text-white hover:bg-[#1E1E1E] transition-all"
-                                    >
-                                      <span className="line-clamp-1 group-hover/sub:text-[#C5A880] transition-colors">
-                                        {sub.title}
-                                      </span>
-                                      <ChevronRight className="h-3 w-3 text-neutral-600 group-hover/sub:text-[#C5A880] group-hover/sub:translate-x-0.5 transition-all shrink-0 ml-1 opacity-0 group-hover/sub:opacity-100" />
-                                    </Link>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          ) : (
-                            <div className="py-1 px-2">
-                              <Link
-                                href={parentHref}
-                                className="inline-flex items-center space-x-1 text-[11px] text-[#C5A880] hover:underline"
-                              >
-                                <span>Explore {cat.title} models</span>
-                                <ArrowRight className="h-3 w-3" />
-                              </Link>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Mega-Menu Footer Bar */}
-                  <div className="relative z-10 mt-7 pt-4 border-t border-[#222222] flex items-center justify-between text-xs">
-                    <div className="flex items-center space-x-2 text-neutral-400 text-[11px]">
-                      <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
-                      <span>Certified German Engineering & Sub-Zero Himalayan Testing</span>
+                <>
+                  {/* Full-Screen Focus Backdrop Overlay with Prominent Left-Side Innmotek Logo */}
+                  <div className="fixed inset-0 top-[74px] z-40 bg-black/85 backdrop-blur-2xl transition-all duration-300 pointer-events-none overflow-hidden">
+                    {/* Left-Side Innmotek Logo framed precisely in the open left area without hiding behind menu */}
+                    <div className="absolute left-6 sm:left-10 lg:left-14 xl:left-20 top-1/2 -translate-y-1/2 w-[260px] sm:w-[310px] lg:w-[350px] xl:w-[390px] h-[170px] sm:h-[200px] lg:h-[230px] xl:h-[260px] opacity-90 select-none pointer-events-none flex flex-col items-center justify-center transition-all duration-300">
+                      <div className="absolute w-[280px] h-[280px] bg-[#C5A880]/15 rounded-full blur-[80px] pointer-events-none" />
+                      <div className="relative w-full h-full">
+                        <Image
+                          src="/images/logo-white.png"
+                          alt="Innmotek Brand Logo"
+                          fill
+                          className="object-contain filter drop-shadow-[0_0_35px_rgba(197,168,128,0.35)]"
+                          priority
+                        />
+                      </div>
                     </div>
-                    <Link
-                      href="/category"
-                      className="inline-flex items-center space-x-1.5 rounded-full bg-[#1C1C1C] hover:bg-[#C5A880] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all"
-                    >
-                      <span>Full Equipment Catalogue</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
                   </div>
-                </div>
+
+                  {/* Compact Sleek Mega-Menu Panel */}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[760px] lg:w-[780px] max-w-[92vw] rounded-2xl border border-[#2E2E2E] bg-gradient-to-b from-[#181818] via-[#121212] to-[#0A0A0A] p-5 sm:p-5.5 shadow-[0_30px_70px_rgba(0,0,0,0.95)] ring-1 ring-white/10 animate-fadeIn z-[100] relative overflow-hidden">
+                    {/* Subtle Ambient Top Glow */}
+                    <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -top-16 left-1/3 w-60 h-60 bg-[#C5A880]/[0.03] rounded-full blur-3xl pointer-events-none" />
+
+                    {/* 3-Column Balanced Layout */}
+                    <div className="relative z-10 grid grid-cols-3 gap-x-5">
+                      {/* Column 1: Water Heating & Storage */}
+                      <div className="space-y-3.5">
+                        {col1Categories.map((cat) => renderCategoryItem(cat))}
+                      </div>
+
+                      {/* Column 2: Solar, Heaters & Radiators */}
+                      <div className="space-y-3.5">
+                        {col2Categories.map((cat) => renderCategoryItem(cat))}
+                      </div>
+
+                      {/* Column 3: Pool & Special Solutions */}
+                      <div className="space-y-3.5">
+                        {col3Categories.map((cat) => renderCategoryItem(cat))}
+                      </div>
+                    </div>
+
+                    {/* Mega-Menu Footer Bar */}
+                    <div className="relative z-10 mt-4 pt-3 border-t border-[#222222] flex items-center justify-between">
+                      <div className="flex items-center space-x-1.5 text-neutral-400 text-[10px]">
+                        <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
+                        <span>Clean Thermal Technology & Extreme Climate Testing</span>
+                      </div>
+                      <Link
+                        href="/category"
+                        className="inline-flex items-center space-x-1 rounded-full bg-[#1C1C1C] hover:bg-[#C5A880] px-3 py-1 text-[9.5px] font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all"
+                      >
+                        <span>Full Catalogue</span>
+                        <ArrowRight className="h-2.5 w-2.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
 
             <Link
               href="/about"
-              className={`text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+              className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
+                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+              } ${
                 pathname === '/about' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
             >
@@ -245,7 +298,9 @@ export default function Header({ categories = [] }) {
 
             <Link
               href="/blogs"
-              className={`text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+              className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
+                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+              } ${
                 pathname.startsWith('/blog') ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
             >
@@ -254,7 +309,9 @@ export default function Header({ categories = [] }) {
 
             <Link
               href="/faqs"
-              className={`text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+              className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
+                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+              } ${
                 pathname === '/faqs' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
             >
@@ -263,7 +320,9 @@ export default function Header({ categories = [] }) {
 
             <Link
               href="/contact"
-              className={`text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+              className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
+                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+              } ${
                 pathname === '/contact' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
             >
@@ -272,7 +331,7 @@ export default function Header({ categories = [] }) {
           </nav>
 
           {/* Action CTA */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className={`hidden lg:flex items-center space-x-4 transition-all duration-300 ${productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
             <Link
               href="/contact"
               className="relative inline-flex items-center space-x-2 rounded-xl bg-[#C5A880] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] transition-all hover:bg-[#D4B890] shadow-md shadow-[#C5A880]/15 group"
@@ -322,13 +381,13 @@ export default function Header({ categories = [] }) {
                 About Innmotek
               </Link>
 
-              {/* Mobile Thermal Solutions Accordion */}
+              {/* Mobile Products Accordion */}
               <div>
                 <button
                   onClick={() => setMobileSolutionsOpen(!mobileSolutionsOpen)}
                   className="flex w-full items-center justify-between text-lg font-bold tracking-tight text-white hover:text-[#C5A880] py-1"
                 >
-                  <span>Thermal Solutions</span>
+                  <span>Products</span>
                   <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${mobileSolutionsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
                 </button>
 

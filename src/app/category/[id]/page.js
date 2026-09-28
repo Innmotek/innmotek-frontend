@@ -70,20 +70,24 @@ export default async function CategoryDetailPage({ params }) {
           </p>
         </div>
 
-        {/* Child Subcategories Chips if applicable */}
+        {/* Child Subcategories Chips with Glassmorphism Shine & Glow */}
         {subCategories.length > 0 && (
           <div className="mt-8 pt-6 border-t border-[#222222] space-y-3 relative z-10">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-              Sub-Specialties:
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#C5A880]">
+              Sub-Specialties & Product Lines:
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {subCategories.map((sub) => (
                 <Link
                   key={sub.slug}
                   href={`/category/${sub.slug}`}
-                  className="rounded-xl border border-[#2B2B2B] bg-[#141414] px-4 py-2 text-xs font-semibold text-neutral-200 hover:border-[#C5A880] hover:text-[#C5A880] transition-colors"
+                  className="group relative inline-flex items-center space-x-2.5 rounded-2xl border border-[#C5A880]/35 bg-gradient-to-r from-[#1A1A1A]/95 via-[#242424]/85 to-[#1A1A1A]/95 backdrop-blur-xl px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg hover:shadow-[0_0_25px_rgba(197,168,128,0.4)] hover:border-[#C5A880] hover:scale-[1.03] transition-all duration-300 overflow-hidden"
                 >
-                  {sub.title}
+                  {/* Subtle Glassmorphism Shine Stripe */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
+                  
+                  <span className="h-2 w-2 rounded-full bg-[#C5A880] shrink-0 shadow-sm shadow-[#C5A880]" />
+                  <span className="tracking-wide group-hover:text-[#C5A880] transition-colors">{sub.title}</span>
                 </Link>
               ))}
             </div>
