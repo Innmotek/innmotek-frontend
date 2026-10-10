@@ -5,14 +5,16 @@
  * Uses NEXT_PUBLIC_API_URL environment variable.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || (
+  process.env.NODE_ENV === 'production'
+    ? 'https://innmotek-backend.onrender.com/api'
+    : 'http://localhost:5000/api'
+);
 
 async function fetchFromApi(endpoint, options = {}) {
   try {
-    const isDev = process.env.NODE_ENV !== 'production';
     const fetchOptions = {
-      cache: isDev ? 'no-store' : 'default',
-      ...(isDev ? {} : { next: { revalidate: 30 } }),
+      cache: 'no-store', // Always fetch fresh data in real-time; never freeze with stale Vercel CDN cache
       ...options
     };
 
