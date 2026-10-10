@@ -97,8 +97,8 @@ export default async function CategoryDetailPage({ params }) {
 
       {/* Pattern 4 Grid: Products List */}
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-[#222222] pb-4">
-          <h2 className="text-xl font-bold text-white uppercase tracking-wider text-xs">
+        <div className="flex items-center justify-between border-b border-[#202020] pb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-white">
             Available Models & Equipment ({products.length})
           </h2>
           <span className="text-[11px] text-neutral-500 font-mono">

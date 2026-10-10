@@ -97,10 +97,26 @@ export default function Header({ categories = [] }) {
   };
 
   const handleMouseLeave = () => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     dropdownTimeoutRef.current = setTimeout(() => {
       setProductsOpen(false);
-    }, 150);
+    }, 200);
   };
+
+  const handleToggle = (e) => {
+    e.preventDefault();
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setProductsOpen((prev) => !prev);
+  };
+
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setProductsOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // 3 balanced columns for compact mega-menu:
   const col1Slugs = ['hot-water-heat-pump', 'hot-water-storage-tanks'];
@@ -125,6 +141,7 @@ export default function Header({ categories = [] }) {
         {/* Parent Category Header Link */}
         <Link
           href={parentHref}
+          onClick={() => setProductsOpen(false)}
           className="group/parent flex items-center space-x-2.5 pb-2 border-b border-[#242424] transition-colors"
         >
           <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
@@ -144,6 +161,7 @@ export default function Header({ categories = [] }) {
                 <li key={sub.slug || sub.id}>
                   <Link
                     href={subHref}
+                    onClick={() => setProductsOpen(false)}
                     className="group/sub flex items-center justify-between py-1.5 px-2.5 rounded-lg text-xs font-medium text-neutral-300 hover:text-white hover:bg-[#1E1E1E] transition-all"
                   >
                     <span className="line-clamp-1 group-hover/sub:text-[#C5A880] transition-colors">
@@ -159,6 +177,7 @@ export default function Header({ categories = [] }) {
           <div className="py-1 px-2.5">
             <Link
               href={parentHref}
+              onClick={() => setProductsOpen(false)}
               className="inline-flex items-center space-x-1.5 text-xs text-[#C5A880] hover:underline"
             >
               <span>Explore {cat.title} models</span>
@@ -173,10 +192,9 @@ export default function Header({ categories = [] }) {
   return (
     <>
       <header
+        onMouseLeave={handleMouseLeave}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          productsOpen
-            ? 'bg-transparent border-transparent shadow-none py-5'
-            : scrolled
+          scrolled || productsOpen
             ? 'bg-[#0A0A0A]/98 backdrop-blur-xl border-b border-[#222222] py-3.5 shadow-2xl'
             : 'bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/90 to-transparent py-5'
         }`}
@@ -207,7 +225,7 @@ export default function Header({ categories = [] }) {
               className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
                 productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
               } ${
-                pathname === '/' ? 'text-[#C5A880]' : 'text-neutral-300'
+                pathname === '/' && !productsOpen ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
             >
               HOME
@@ -220,14 +238,19 @@ export default function Header({ categories = [] }) {
               onMouseLeave={handleMouseLeave}
             >
               <button
-                className={`flex items-center space-x-1.5 text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] ${
+                type="button"
+                onClick={handleToggle}
+                className={`flex items-center space-x-1.5 text-xs font-semibold tracking-widest uppercase transition-colors hover:text-[#C5A880] cursor-pointer ${
                   pathname.startsWith('/category') || pathname.startsWith('/products') || productsOpen ? 'text-[#C5A880]' : 'text-neutral-300'
                 }`}
                 aria-expanded={productsOpen}
+                aria-haspopup="true"
               >
                 <span>PRODUCTS</span>
                 <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${productsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
               </button>
+              {/* Invisible mouse bridge down to mega panel */}
+              <div className="absolute top-full left-0 right-0 h-8 pointer-events-auto" />
             </div>
 
             <Link
@@ -276,7 +299,9 @@ export default function Header({ categories = [] }) {
           </nav>
 
           {/* Action CTA */}
-          <div className={`hidden lg:flex items-center space-x-4 transition-all duration-300 ${productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <div className={`hidden lg:flex items-center space-x-4 transition-all duration-300 ${
+            productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}>
             <Link
               href="/contact"
               className="relative inline-flex items-center space-x-2 rounded-xl bg-[#C5A880] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] transition-all hover:bg-[#D4B890] shadow-md shadow-[#C5A880]/15 group"
@@ -289,9 +314,7 @@ export default function Header({ categories = [] }) {
           {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`lg:hidden rounded-xl border border-[#2B2B2B] bg-[#141414] p-2 text-neutral-300 hover:text-white transition-opacity ${
-              productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
-            }`}
+            className="lg:hidden rounded-xl border border-[#2B2B2B] bg-[#141414] p-2 text-neutral-300 hover:text-white transition-opacity"
             aria-label="Toggle navigation menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -302,11 +325,17 @@ export default function Header({ categories = [] }) {
       {/* Desktop Mega Dropdown Panel - Sibling to <header>, NEVER trapped by header backdrop-blur! */}
       {productsOpen && (
         <div
-          className={`fixed inset-0 ${scrolled ? 'top-[64px]' : 'top-[76px]'} z-40 bg-black/95 backdrop-blur-2xl transition-all duration-300 flex items-start justify-center pt-4 sm:pt-6 pb-8 overflow-y-auto`}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          className={`fixed inset-0 ${scrolled ? 'top-[62px]' : 'top-[74px]'} z-40 bg-black/90 backdrop-blur-2xl transition-all duration-300 flex items-start justify-center pt-4 sm:pt-6 pb-8 overflow-y-auto`}
+          onMouseEnter={handleMouseLeave}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setProductsOpen(false);
+          }}
         >
-          <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6 lg:gap-12 animate-fadeIn">
+          <div
+            className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6 lg:gap-12 animate-fadeIn"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             {/* Left-Side Innmotek Logo framed precisely in the open left area (never overlaps) */}
             <div className="hidden lg:flex flex-col items-center justify-center w-[220px] xl:w-[260px] shrink-0 select-none py-4">
               <div className="relative w-full h-[120px] xl:h-[140px] flex items-center justify-center">

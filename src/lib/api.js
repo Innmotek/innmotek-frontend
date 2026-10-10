@@ -14,11 +14,9 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || (
 async function fetchFromApi(endpoint, options = {}) {
   try {
     const isDev = process.env.NODE_ENV !== 'production';
-    const fetchOptions = {
-      cache: isDev ? 'no-store' : 'default',
-      next: { revalidate: 5 }, // Revalidate every 5 seconds for real-time CMS sync
-      ...options
-    };
+    const fetchOptions = isDev
+      ? { cache: 'no-store', ...options }
+      : { next: { revalidate: 5 }, ...options };
 
     const res = await fetch(`${API_BASE}${endpoint}`, fetchOptions);
 
