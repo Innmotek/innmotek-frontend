@@ -93,29 +93,12 @@ export default function ProductCard({ product, priority = false }) {
         {/* Gradient Vignette */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/30 to-transparent" />
 
-        {/* Floating Badges Overlay on Image */}
-        {quickSpecs.length > 0 && (
-          <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-            {quickSpecs.map((spec, i) => {
-              const Icon = spec.icon;
-              return (
-                <span
-                  key={i}
-                  className={`inline-flex items-center space-x-1 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-lg ${spec.color}`}
-                >
-                  <Icon className="h-3 w-3 shrink-0" />
-                  <span>{spec.label}</span>
-                </span>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       {/* Product Content Block */}
       <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
         <div className="space-y-3">
-          {/* Quick-Spec Badges Row in Body Header */}
+          {/* Quick-Spec Badges Row in Card Body */}
           {quickSpecs.length > 0 && (
             <div className="flex flex-wrap gap-1.5 pt-1">
               {quickSpecs.map((spec, i) => {

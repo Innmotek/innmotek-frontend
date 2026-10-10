@@ -106,8 +106,8 @@ export default function ThermatecCarousel({ categories = [] }) {
                 </div>
 
                 {/* Signature Thermatec Gold/Sand Bottom Banner */}
-                <div className="relative z-10 bg-[#C5A880] group-hover:bg-[#D4B890] px-5 py-4 transition-colors duration-300 flex items-center justify-between shadow-lg">
-                  <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0A0A0A] line-clamp-1">
+                <div className="relative z-10 bg-[#C5A880] group-hover:bg-[#D4B890] px-5 py-3.5 transition-colors duration-300 flex items-center justify-between gap-3 shadow-lg">
+                  <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#0A0A0A] truncate min-w-0 flex-1">
                     {cat.title}
                   </span>
                   <div className="h-7 w-7 rounded-full bg-[#0A0A0A]/90 text-[#C5A880] flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:translate-x-1 shadow-sm">

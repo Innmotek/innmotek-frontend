@@ -121,48 +121,48 @@ export default function Header({ categories = [] }) {
     const parentHref = resolveCategoryHref(cat.slug, true);
 
     return (
-      <div key={cat.slug || cat.id} className="space-y-1.5">
+      <div key={cat.slug || cat.id} className="space-y-2">
         {/* Parent Category Header Link */}
         <Link
           href={parentHref}
-          className="group/parent flex items-center space-x-2 pb-1.5 border-b border-[#242424] transition-colors"
+          className="group/parent flex items-center space-x-2.5 pb-2 border-b border-[#242424] transition-colors"
         >
-          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
-            <IconComp className="h-3 w-3" />
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#C5A880]/15 text-[#C5A880] group-hover/parent:bg-[#C5A880] group-hover/parent:text-[#0A0A0A] transition-colors">
+            <IconComp className="h-3.5 w-3.5" />
           </div>
-          <span className="text-[11px] font-bold text-white uppercase tracking-wide group-hover/parent:text-[#C5A880] transition-colors line-clamp-1">
+          <span className="text-xs sm:text-[13px] font-bold text-white uppercase tracking-wider group-hover/parent:text-[#C5A880] transition-colors line-clamp-1">
             {cat.title}
           </span>
         </Link>
 
         {/* Subcategories List */}
         {hasSubs ? (
-          <ul className="space-y-0.5">
+          <ul className="space-y-1">
             {cat.subCategory.map((sub) => {
               const subHref = resolveCategoryHref(sub.slug, false);
               return (
                 <li key={sub.slug || sub.id}>
                   <Link
                     href={subHref}
-                    className="group/sub flex items-center justify-between py-1 px-2 rounded-md text-[10.5px] text-neutral-300 hover:text-white hover:bg-[#1E1E1E] transition-all"
+                    className="group/sub flex items-center justify-between py-1.5 px-2.5 rounded-lg text-xs font-medium text-neutral-300 hover:text-white hover:bg-[#1E1E1E] transition-all"
                   >
                     <span className="line-clamp-1 group-hover/sub:text-[#C5A880] transition-colors">
                       {sub.title}
                     </span>
-                    <ChevronRight className="h-2.5 w-2.5 text-neutral-600 group-hover/sub:text-[#C5A880] group-hover/sub:translate-x-0.5 transition-all shrink-0 ml-1 opacity-0 group-hover/sub:opacity-100" />
+                    <ChevronRight className="h-3 w-3 text-neutral-600 group-hover/sub:text-[#C5A880] group-hover/sub:translate-x-0.5 transition-all shrink-0 ml-1 opacity-0 group-hover/sub:opacity-100" />
                   </Link>
                 </li>
               );
             })}
           </ul>
         ) : (
-          <div className="py-1 px-2">
+          <div className="py-1 px-2.5">
             <Link
               href={parentHref}
-              className="inline-flex items-center space-x-1 text-[10.5px] text-[#C5A880] hover:underline"
+              className="inline-flex items-center space-x-1.5 text-xs text-[#C5A880] hover:underline"
             >
               <span>Explore {cat.title} models</span>
-              <ArrowRight className="h-2.5 w-2.5" />
+              <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         )}
@@ -174,17 +174,24 @@ export default function Header({ categories = [] }) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
+          productsOpen
+            ? 'bg-transparent border-transparent shadow-none py-5'
+            : scrolled
             ? 'bg-[#0A0A0A]/98 backdrop-blur-xl border-b border-[#222222] py-3.5 shadow-2xl'
             : 'bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/90 to-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative h-9 w-32 sm:w-36">
+          {/* Brand Logo - Original 2x White No-Slogan Logo */}
+          <Link
+            href="/"
+            className={`flex items-center space-x-3 group transition-all duration-300 ${
+              productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
+          >
+            <div className="relative h-11 w-40 sm:h-12 sm:w-44">
               <Image
-                src="/images/logo-white.png"
+                src="/images/logo-white-no-slogan.png"
                 alt="Innmotek Thermal Systems"
                 fill
                 className="object-contain object-left transition-opacity group-hover:opacity-90"
@@ -198,7 +205,7 @@ export default function Header({ categories = [] }) {
             <Link
               href="/"
               className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
-                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+                productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
               } ${
                 pathname === '/' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
@@ -221,74 +228,12 @@ export default function Header({ categories = [] }) {
                 <span>PRODUCTS</span>
                 <ChevronDown className={`h-3.5 w-3.5 opacity-70 transition-transform duration-300 ${productsOpen ? 'rotate-180 text-[#C5A880]' : ''}`} />
               </button>
-
-              {/* Full-Width Hierarchical Mega Dropdown Panel */}
-              {productsOpen && (
-                <>
-                  {/* Full-Screen Focus Backdrop Overlay with Prominent Left-Side Innmotek Logo */}
-                  <div className="fixed inset-0 top-[74px] z-40 bg-black/85 backdrop-blur-2xl transition-all duration-300 pointer-events-none overflow-hidden">
-                    {/* Left-Side Innmotek Logo framed precisely in the open left area without hiding behind menu */}
-                    <div className="absolute left-6 sm:left-10 lg:left-14 xl:left-20 top-1/2 -translate-y-1/2 w-[260px] sm:w-[310px] lg:w-[350px] xl:w-[390px] h-[170px] sm:h-[200px] lg:h-[230px] xl:h-[260px] opacity-90 select-none pointer-events-none flex flex-col items-center justify-center transition-all duration-300">
-                      <div className="absolute w-[280px] h-[280px] bg-[#C5A880]/15 rounded-full blur-[80px] pointer-events-none" />
-                      <div className="relative w-full h-full">
-                        <Image
-                          src="/images/logo-white.png"
-                          alt="Innmotek Brand Logo"
-                          fill
-                          className="object-contain filter drop-shadow-[0_0_35px_rgba(197,168,128,0.35)]"
-                          priority
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Compact Sleek Mega-Menu Panel */}
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[760px] lg:w-[780px] max-w-[92vw] rounded-2xl border border-[#2E2E2E] bg-gradient-to-b from-[#181818] via-[#121212] to-[#0A0A0A] p-5 sm:p-5.5 shadow-[0_30px_70px_rgba(0,0,0,0.95)] ring-1 ring-white/10 animate-fadeIn z-[100] relative overflow-hidden">
-                    {/* Subtle Ambient Top Glow */}
-                    <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
-                    <div className="absolute -top-16 left-1/3 w-60 h-60 bg-[#C5A880]/[0.03] rounded-full blur-3xl pointer-events-none" />
-
-                    {/* 3-Column Balanced Layout */}
-                    <div className="relative z-10 grid grid-cols-3 gap-x-5">
-                      {/* Column 1: Water Heating & Storage */}
-                      <div className="space-y-3.5">
-                        {col1Categories.map((cat) => renderCategoryItem(cat))}
-                      </div>
-
-                      {/* Column 2: Solar, Heaters & Radiators */}
-                      <div className="space-y-3.5">
-                        {col2Categories.map((cat) => renderCategoryItem(cat))}
-                      </div>
-
-                      {/* Column 3: Pool & Special Solutions */}
-                      <div className="space-y-3.5">
-                        {col3Categories.map((cat) => renderCategoryItem(cat))}
-                      </div>
-                    </div>
-
-                    {/* Mega-Menu Footer Bar */}
-                    <div className="relative z-10 mt-4 pt-3 border-t border-[#222222] flex items-center justify-between">
-                      <div className="flex items-center space-x-1.5 text-neutral-400 text-[10px]">
-                        <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
-                        <span>Clean Thermal Technology & Extreme Climate Testing</span>
-                      </div>
-                      <Link
-                        href="/category"
-                        className="inline-flex items-center space-x-1 rounded-full bg-[#1C1C1C] hover:bg-[#C5A880] px-3 py-1 text-[9.5px] font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all"
-                      >
-                        <span>Full Catalogue</span>
-                        <ArrowRight className="h-2.5 w-2.5" />
-                      </Link>
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
 
             <Link
               href="/about"
               className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
-                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+                productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
               } ${
                 pathname === '/about' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
@@ -299,7 +244,7 @@ export default function Header({ categories = [] }) {
             <Link
               href="/blogs"
               className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
-                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+                productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
               } ${
                 pathname.startsWith('/blog') ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
@@ -310,7 +255,7 @@ export default function Header({ categories = [] }) {
             <Link
               href="/faqs"
               className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
-                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+                productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
               } ${
                 pathname === '/faqs' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
@@ -321,7 +266,7 @@ export default function Header({ categories = [] }) {
             <Link
               href="/contact"
               className={`text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:text-[#C5A880] ${
-                productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'
+                productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
               } ${
                 pathname === '/contact' ? 'text-[#C5A880]' : 'text-neutral-300'
               }`}
@@ -331,7 +276,7 @@ export default function Header({ categories = [] }) {
           </nav>
 
           {/* Action CTA */}
-          <div className={`hidden lg:flex items-center space-x-4 transition-all duration-300 ${productsOpen ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+          <div className={`hidden lg:flex items-center space-x-4 transition-all duration-300 ${productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             <Link
               href="/contact"
               className="relative inline-flex items-center space-x-2 rounded-xl bg-[#C5A880] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] transition-all hover:bg-[#D4B890] shadow-md shadow-[#C5A880]/15 group"
@@ -344,7 +289,9 @@ export default function Header({ categories = [] }) {
           {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden rounded-xl border border-[#2B2B2B] bg-[#141414] p-2 text-neutral-300 hover:text-white"
+            className={`lg:hidden rounded-xl border border-[#2B2B2B] bg-[#141414] p-2 text-neutral-300 hover:text-white transition-opacity ${
+              productsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
             aria-label="Toggle navigation menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -352,13 +299,79 @@ export default function Header({ categories = [] }) {
         </div>
       </header>
 
+      {/* Desktop Mega Dropdown Panel - Sibling to <header>, NEVER trapped by header backdrop-blur! */}
+      {productsOpen && (
+        <div
+          className={`fixed inset-0 ${scrolled ? 'top-[64px]' : 'top-[76px]'} z-40 bg-black/95 backdrop-blur-2xl transition-all duration-300 flex items-start justify-center pt-4 sm:pt-6 pb-8 overflow-y-auto`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6 lg:gap-12 animate-fadeIn">
+            {/* Left-Side Innmotek Logo framed precisely in the open left area (never overlaps) */}
+            <div className="hidden lg:flex flex-col items-center justify-center w-[220px] xl:w-[260px] shrink-0 select-none py-4">
+              <div className="relative w-full h-[120px] xl:h-[140px] flex items-center justify-center">
+                <div className="absolute w-[180px] h-[180px] bg-[#C5A880]/15 rounded-full blur-[60px] pointer-events-none" />
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/images/logo-white.png"
+                    alt="Innmotek Brand Logo"
+                    fill
+                    className="object-contain filter drop-shadow-[0_0_25px_rgba(197,168,128,0.35)]"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Right-Side Spacious Mega-Menu Panel */}
+            <div className="flex-1 max-w-[880px] rounded-2xl border border-[#2E2E2E] bg-gradient-to-b from-[#181818] via-[#121212] to-[#0A0A0A] p-6 sm:p-7 shadow-[0_30px_70px_rgba(0,0,0,0.95)] ring-1 ring-white/10 relative overflow-hidden shrink-0">
+              {/* Subtle Ambient Top Glow */}
+              <div className="absolute top-0 right-0 w-80 h-80 bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -top-16 left-1/3 w-72 h-72 bg-[#C5A880]/[0.03] rounded-full blur-3xl pointer-events-none" />
+
+              {/* 3-Column Balanced Layout */}
+              <div className="relative z-10 grid grid-cols-3 gap-x-6 sm:gap-x-7">
+                {/* Column 1: Water Heating & Storage */}
+                <div className="space-y-4">
+                  {col1Categories.map((cat) => renderCategoryItem(cat))}
+                </div>
+
+                {/* Column 2: Solar, Heaters & Radiators */}
+                <div className="space-y-4">
+                  {col2Categories.map((cat) => renderCategoryItem(cat))}
+                </div>
+
+                {/* Column 3: Pool & Special Solutions */}
+                <div className="space-y-4">
+                  {col3Categories.map((cat) => renderCategoryItem(cat))}
+                </div>
+              </div>
+
+              {/* Mega-Menu Footer Bar */}
+              <div className="relative z-10 mt-5 pt-3.5 border-t border-[#222222] flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-neutral-400 text-xs font-mono">
+                  <span>Thermal Architecture & Systems</span>
+                </div>
+                <Link
+                  href="/category"
+                  className="inline-flex items-center space-x-1.5 rounded-full bg-[#1C1C1C] hover:bg-[#C5A880] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-neutral-200 hover:text-[#0A0A0A] border border-[#2E2E2E] hover:border-[#C5A880] transition-all shadow-sm"
+                >
+                  <span>Full Catalogue</span>
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl lg:hidden p-6 flex flex-col justify-between animate-fadeIn overflow-y-auto">
           <div>
             <div className="flex items-center justify-between border-b border-[#222222] pb-4">
-              <div className="relative h-8 w-32">
-                <Image src="/images/logo-white.png" alt="Innmotek" fill className="object-contain object-left" />
+              <div className="relative h-9 w-36">
+                <Image src="/images/logo-white-no-slogan.png" alt="Innmotek" fill className="object-contain object-left" />
               </div>
               <button onClick={() => setMobileOpen(false)} className="rounded-lg p-2 text-neutral-400 hover:text-white">
                 <X className="h-6 w-6" />

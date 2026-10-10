@@ -45,6 +45,11 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" className={`dark scroll-smooth ${inter.variable} ${plusJakartaSans.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      </head>
       <body className="bg-[#0A0A0A] text-white font-sans min-h-screen flex flex-col antialiased selection:bg-[#C5A880] selection:text-[#0A0A0A]">
         {/* Navigation Bar */}
         <Header categories={categories} />

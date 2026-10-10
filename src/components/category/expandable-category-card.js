@@ -83,14 +83,14 @@ export default function ExpandableCategoryCard({ cat }) {
         </div>
       )}
 
-      {/* Thermatec Signature Pinned Gold Bar (Clean - Removed Clutter Subtitle) */}
-      <div className="relative z-10 bg-[#C5A880] p-4.5 transition-all duration-300 group-hover:bg-[#D4B890] flex items-center justify-between shadow-lg">
-        <div>
-          <h2 className="text-sm font-extrabold text-[#0A0A0A] uppercase tracking-wider line-clamp-1">
+      {/* Thermatec Signature Pinned Gold Bar (Clean - Perfectly Aligned) */}
+      <div className="relative z-10 bg-[#C5A880] px-5 py-3.5 transition-all duration-300 group-hover:bg-[#D4B890] flex items-center justify-between gap-3 shadow-lg">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-xs sm:text-sm font-extrabold text-[#0A0A0A] uppercase tracking-wider truncate">
             {cat.title}
           </h2>
         </div>
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0A0A0A] text-[#C5A880] transition-transform duration-300 group-hover:translate-x-1 shadow-md shrink-0">
+        <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-[#0A0A0A] text-[#C5A880] transition-transform duration-300 group-hover:translate-x-1 shadow-md shrink-0">
           <ArrowRight className="h-4 w-4" />
         </div>
       </div>
