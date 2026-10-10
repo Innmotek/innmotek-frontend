@@ -16,7 +16,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  getBanners,
+  getHeroData,
   getCategories,
   getFeaturedProducts,
   getTestimonials,
@@ -24,6 +24,7 @@ import {
   getBlogs
 } from '@/lib/api';
 import ThermatecCarousel from '@/components/home/thermatec-carousel';
+import HeroSlider from '@/components/home/hero-slider';
 import {
   ArrowRight,
   Zap,
@@ -49,8 +50,8 @@ import NewsletterBox from '@/components/common/newsletter-box';
 export const revalidate = 30;
 
 export default async function HomePage() {
-  const [banners, categories, featured, testimonials, brands, blogs] = await Promise.all([
-    getBanners(),
+  const [heroData, categories, featured, testimonials, brands, blogs] = await Promise.all([
+    getHeroData(),
     getCategories(),
     getFeaturedProducts(),
     getTestimonials(),
@@ -58,79 +59,15 @@ export default async function HomePage() {
     getBlogs()
   ]);
 
-  // Pick the real active heat pump banner from API
-  const heroBanner = banners.find(b => b.title?.toLowerCase().includes('heat pump') && b.image) || banners[0];
-  const heroImageUrl = heroBanner?.image || 'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/8ef14c3d-2c71-4928-9edd-fc2ea700199a.webp';
-
   // Top 3 blogs
   const latestBlogs = blogs.slice(0, 3);
 
   return (
     <div className="space-y-24 sm:space-y-32 pb-24">
       {/* =========================================================================
-          SECTION 1: HERO (Pattern 1: Cinematic Full-Bleed Hero)
+          SECTION 1: HERO (Dynamic Hero Media Engine)
           ========================================================================= */}
-      <section className="relative min-h-[94vh] flex items-center justify-center pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Full-Bleed Background Visual with Cinematic Dark Vignette */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <Image
-            src={heroImageUrl}
-            alt="Innmotek Thermal Engineering"
-            fill
-            className="object-cover object-center scale-100"
-            priority
-            unoptimized
-          />
-          {/* Gradient Vignette matching DESIGN_SPEC.md Pattern 1 */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(to top, #0A0A0A 8%, rgba(10, 10, 10, 0.45) 55%, rgba(10, 10, 10, 0.85) 100%)'
-            }}
-          />
-          {/* Radial center vignette to enhance text contrast */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#0A0A0A]/40 to-[#0A0A0A]/95" />
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8 animate-fadeIn">
-          {/* Engineering Badge */}
-          <div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/50 bg-[#0A0A0A]/80 px-4 py-1.5 backdrop-blur-md shadow-lg">
-            <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" />
-            <span className="text-[11px] font-bold tracking-widest uppercase text-[#C5A880]">
-              Advanced Thermal Engineering & Heat Pumps
-            </span>
-          </div>
-
-          {/* Display Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] font-display drop-shadow-md">
-            SUSTAINABLE THERMAL <br />
-            <span className="gold-gradient-text">PERFORMANCE</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-neutral-200 font-normal leading-relaxed drop-shadow">
-            Pioneering ultra-low energy heat pumps, aerothermal heating, and clean thermal storage engineered for Himalayan climates and commercial applications.
-          </p>
-
-          {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link
-              href="/#categories"
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 rounded-xl bg-[#C5A880] px-8 py-4 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] hover:bg-[#D4B890] transition-all shadow-xl shadow-[#C5A880]/20 group"
-            >
-              <span>Explore Equipment</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-
-            <Link
-              href="/contact"
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 rounded-xl border border-[#333333] bg-[#0A0A0A]/80 px-8 py-4 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md hover:border-[#C5A880] transition-all"
-            >
-              <span>Request Sizing Assessment</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSlider banners={heroData.banners} config={heroData.config} />
 
       {/* =========================================================================
           SECTION 2: THERMATEC-STYLE CATEGORY SLIDER WITH AUTO-SCROLL

@@ -35,6 +35,20 @@ export async function getBanners() {
   return data?.banners || [];
 }
 
+export async function getHeroData() {
+  const data = await fetchFromApi('/banners');
+  return {
+    banners: data?.banners || [],
+    config: data?.config || {
+      media_mode: 'image',
+      layout_mode: 'carousel',
+      transition_engine: 'animation',
+      animation_type: 'ken_burns',
+      interval_seconds: 6
+    }
+  };
+}
+
 export async function getCategories() {
   const data = await fetchFromApi('/categories');
   return data?.categories || [];

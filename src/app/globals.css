@@ -233,3 +233,34 @@ body {
 .product-cms-description li {
   margin-bottom: 0.35rem !important;
 }
+
+/* Hero Showcase Animation Engine */
+@keyframes kenBurns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.07) translate(-0.8%, -0.8%);
+  }
+  100% {
+    transform: scale(1.02) translate(0.5%, 0.5%);
+  }
+}
+
+.animate-kenBurns {
+  animation: kenBurns 14s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes slideProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-slideProgress {
+  animation: slideProgress linear forwards;
+}
