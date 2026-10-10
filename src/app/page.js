@@ -47,8 +47,7 @@ import {
 import ProductCard from '@/components/common/product-card';
 import NewsletterBox from '@/components/common/newsletter-box';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 5;
 
 export default async function HomePage() {
   const [heroData, categories, featured, testimonials, brands, blogs] = await Promise.all([
