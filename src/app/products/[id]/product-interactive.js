@@ -24,7 +24,8 @@ import {
   Sparkles,
   CheckCircle2,
   Download,
-  Info
+  Info,
+  ExternalLink
 } from 'lucide-react';
 import SafeHtml from '@/components/common/safe-html';
 
@@ -68,7 +69,30 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
     availableTabs.push({ id: 'warranty', label: 'Warranty Policy', icon: Shield, content: warrantyContent });
   }
 
-  const [activeTab, setActiveTab] = useState(availableTabs[0]?.id || null);
+  // Parse downloadable documents / brochures / catalogues
+  let downloadList = [];
+  if (Array.isArray(product.downloads)) {
+    downloadList = product.downloads;
+  } else if (Array.isArray(product.catalogues)) {
+    downloadList = product.catalogues;
+  } else if (product.download && typeof product.download === 'string' && product.download.trim() !== '' && product.download !== '<p><br></p>') {
+    try {
+      const parsed = JSON.parse(product.download);
+      downloadList = Array.isArray(parsed) ? parsed : [{ title: `${product.title} - Technical Document`, file: product.download }];
+    } catch {
+      downloadList = [{ title: `${product.title} - Technical Document`, file: product.download }];
+    }
+  }
+
+  // Always append Downloads tab so customers can view documents or clean fallback
+  availableTabs.push({
+    id: 'downloads',
+    label: 'Downloads',
+    icon: Download,
+    isCustom: true
+  });
+
+  const [activeTab, setActiveTab] = useState(availableTabs[0]?.id || 'downloads');
 
   return (
     <div className="space-y-16">
@@ -237,6 +261,92 @@ export default function ProductInteractive({ product, relatedProducts = [] }) {
             <div className="p-8 sm:p-12">
               {availableTabs.map((tab) => {
                 if (tab.id !== activeTab) return null;
+
+                if (tab.id === 'downloads') {
+                  return (
+                    <div key={tab.id} className="space-y-6 animate-fadeIn">
+                      {downloadList.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {downloadList.map((item, idx) => {
+                            const fileUrl = typeof item === 'string' ? item : (item.file || item.url || item.path || '');
+                            const title = (typeof item === 'object' && item.title)
+                              ? item.title
+                              : `${product.title} - Document ${idx + 1}`;
+
+                            return (
+                              <div
+                                key={idx}
+                                className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl border border-[#222222] bg-[#161616] hover:border-[#C5A880]/50 transition-all gap-4"
+                              >
+                                <div className="flex items-start space-x-3.5">
+                                  <div className="h-10 w-10 rounded-xl bg-[#C5A880]/15 flex items-center justify-center text-[#C5A880] shrink-0 mt-0.5">
+                                    <FileText className="h-5 w-5" />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-bold text-white leading-snug">
+                                      {title}
+                                    </h4>
+                                    <span className="inline-block mt-1 text-[10px] font-mono uppercase tracking-wider text-[#C5A880] bg-[#C5A880]/10 px-2 py-0.5 rounded">
+                                      PDF Document
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center space-x-2 shrink-0">
+                                  {fileUrl && (
+                                    <>
+                                      <a
+                                        href={fileUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-[#333333] hover:border-[#C5A880] text-xs font-bold text-neutral-300 hover:text-white transition-all cursor-pointer"
+                                      >
+                                        <span>View</span>
+                                        <ExternalLink className="h-3.5 w-3.5" />
+                                      </a>
+                                      <a
+                                        href={fileUrl}
+                                        download
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-[#C5A880] hover:bg-[#D4B890] text-xs font-bold text-[#0A0A0A] transition-all cursor-pointer"
+                                      >
+                                        <Download className="h-3.5 w-3.5" />
+                                        <span>Download</span>
+                                      </a>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="text-center py-10 px-4 max-w-md mx-auto space-y-4">
+                          <div className="h-12 w-12 rounded-full bg-[#C5A880]/15 flex items-center justify-center text-[#C5A880] mx-auto">
+                            <Download className="h-6 w-6" />
+                          </div>
+                          <div className="space-y-1">
+                            <h3 className="text-base font-bold text-white">No Downloads Found</h3>
+                            <p className="text-xs text-neutral-400 leading-relaxed">
+                              No digital brochures or specification sheets have been attached to this model yet. Contact our team to receive custom engineering drawings and submittals.
+                            </p>
+                          </div>
+                          <div className="pt-2">
+                            <Link
+                              href="/contact"
+                              className="inline-flex items-center space-x-2 rounded-xl bg-[#C5A880] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] hover:bg-[#D4B890] transition-colors"
+                            >
+                              <span>Request Technical Package</span>
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 return (
                   <SafeHtml
                     key={tab.id}

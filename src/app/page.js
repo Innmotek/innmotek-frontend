@@ -75,9 +75,6 @@ export default async function HomePage() {
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#222222] pb-6">
           <div className="space-y-2">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">
-              Commercial & Residential Systems
-            </span>
             <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white font-display">
               Our Products
             </h2>
@@ -96,8 +93,9 @@ export default async function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 3: FEATURED EQUIPMENT GRID WITH QUICK-SPEC BADGES
+          SECTION 3: FEATURED EQUIPMENT GRID WITH QUICK-SPEC BADGES (Temporarily Hidden)
           ========================================================================= */}
+      {/* 
       {featured.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#222222] pb-6">
@@ -125,10 +123,11 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+      */}
 
       {/* =========================================================================
           SECTION 4: DEDICATED EDUCATIONAL BLOCK - WHAT IS AEROTHERMAL TECHNOLOGY?
-          (1kW In -> Up to 4.5kW Out Explainer Diagram)
+          (How a Heat Pump Works: 3-Stage Thermodynamic Cycle)
           ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#2B2B2B] bg-[#111111] p-8 sm:p-14 space-y-12 shadow-2xl relative overflow-hidden">
@@ -137,12 +136,12 @@ export default async function HomePage() {
 
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/40 bg-[#0A0A0A] px-3.5 py-1">
+            {/*<div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/40 bg-[#0A0A0A] px-3.5 py-1">
               <Flame className="h-3.5 w-3.5 text-[#C5A880]" />
               <span className="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">
                 Thermodynamic Innovation
               </span>
-            </div>
+            </div>*/}
             <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-white font-display">
               What is Aerothermal Technology?
             </h2>
@@ -151,56 +150,56 @@ export default async function HomePage() {
             </p>
           </div>
 
-          {/* 3-Step Thermodynamic Energy Flow Diagram */}
+          {/* 3-Step Thermodynamic Mechanical Working Cycle */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-            {/* Step 1: Input */}
-            <div className="rounded-2xl border border-[#222222] bg-[#161616] p-6 space-y-4 relative">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C5A880]/15 text-[#C5A880]">
-                <Zap className="h-5 w-5" />
-              </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880]">Step 01 • Electrical Input</span>
-                <h3 className="text-lg font-bold text-white mt-1">1 kW Electrical Power</h3>
-              </div>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Powers the high-efficiency DC inverter compressor to circulate eco-friendly refrigerant through the thermodynamic cycle.
-              </p>
-              <div className="pt-2 text-[11px] font-mono text-neutral-500">
-                25% of Total Energy Used
-              </div>
-            </div>
-
-            {/* Step 2: Renewable Harvest */}
+            {/* Step 1: Ambient Heat Absorption */}
             <div className="rounded-2xl border border-[#222222] bg-[#161616] p-6 space-y-4 relative">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
                 <Wind className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Step 02 • Ambient Harvest</span>
-                <h3 className="text-lg font-bold text-white mt-1">+ 3.5 kW Free Air Energy</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Step 01 • Heat Absorption</span>
+                <h3 className="text-lg font-bold text-white mt-1">Heat Extraction from Outdoor Air</h3>
               </div>
               <p className="text-xs text-neutral-400 leading-relaxed">
-                Absorbed directly from outside atmospheric air via the multi-path evaporator coil, active down to -25°C sub-zero ambient.
+                Outside air is drawn over the evaporator coil where eco-friendly refrigerant evaporates at sub-zero temperatures, absorbing natural latent heat present in the atmosphere—active even down to -25°C.
               </p>
               <div className="pt-2 text-[11px] font-mono text-emerald-400 font-semibold">
-                75% Renewable Energy Free
+                Captures 75% Renewable Energy
               </div>
             </div>
 
-            {/* Step 3: High-Grade Output */}
+            {/* Step 2: Inverter Compression & Amplification */}
+            <div className="rounded-2xl border border-[#222222] bg-[#161616] p-6 space-y-4 relative">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C5A880]/15 text-[#C5A880]">
+                <Zap className="h-5 w-5" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880]">Step 02 • Compression</span>
+                <h3 className="text-lg font-bold text-white mt-1">Inverter Temperature Amplification</h3>
+              </div>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                The vaporized refrigerant enters the DC inverter compressor. As it is pressurized, its temperature increases dramatically, transforming low-grade ambient heat into high-temperature thermal energy (up to 75°C).
+              </p>
+              <div className="pt-2 text-[11px] font-mono text-neutral-400">
+                Powered by Minimal Electrical Input
+              </div>
+            </div>
+
+            {/* Step 3: Condensation & Heat Delivery */}
             <div className="rounded-2xl border border-[#C5A880]/40 bg-[#1A1815] p-6 space-y-4 relative shadow-lg">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C5A880] text-[#0A0A0A]">
                 <Flame className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880]">Step 03 • Thermal Output</span>
-                <h3 className="text-lg font-bold text-white mt-1">= Up to 4.5 kW Heat Output</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880]">Step 03 • Condensation</span>
+                <h3 className="text-lg font-bold text-white mt-1">Thermal Delivery into Your Space</h3>
               </div>
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Delivered straight into hot water storage, space hydronics, or pool heating loops at high COP seasonal efficiency.
+                The superheated refrigerant flows through a high-efficiency plate condenser, transferring its intense heat directly into your home's water circuit for domestic hot water, underfloor hydronics, or radiators.
               </p>
               <div className="pt-2 text-[11px] font-mono text-[#C5A880] font-bold">
-                COP 4.5 Efficiency Ratio
+                100% Usable Hot Water & Space Heating
               </div>
             </div>
           </div>
@@ -228,12 +227,12 @@ export default async function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 5: ENGINEERING TEASER (Pattern 5: 2-Column Split)
+          SECTION 5: ENGINEERING TEASER (Pattern 5: 2-Column Split) (Temporarily Hidden)
           ========================================================================= */}
+      {/* 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#222222] bg-[#121212] p-8 sm:p-14 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            {/* Left Content */}
             <div className="space-y-6">
               <div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/40 bg-[#0A0A0A] px-3.5 py-1">
                 <ShieldCheck className="h-3.5 w-3.5 text-[#C5A880]" />
@@ -275,7 +274,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Visual Box */}
             <div className="relative h-[340px] sm:h-[420px] rounded-2xl border border-[#2B2B2B] overflow-hidden bg-[#181818]">
               <Image
                 src="https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/products/3e12ee32-093e-43f5-87ab-d90b53a3f6bc.webp"
@@ -293,6 +291,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      */}
 
       {/* =========================================================================
           SECTION 6: LATEST TECHNICAL INSIGHTS & BLOGS (Top 3 from /api/blogs)

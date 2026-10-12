@@ -223,33 +223,20 @@ export default function HeroSlider({ banners = [], config = {} }) {
       {/* =========================================================================
           FOREGROUND CONTENT & TYPOGRAPHY
           ========================================================================= */}
-      <div className="relative z-30 max-w-5xl mx-auto text-center space-y-8 animate-fadeIn">
-        {/* Dynamic Engineering Badge */}
-        <div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/50 bg-[#0A0A0A]/80 px-4 py-1.5 backdrop-blur-md shadow-lg transition-all duration-500">
-          <Sparkles className="h-3.5 w-3.5 text-[#C5A880]" />
-          <span className="text-[11px] font-bold tracking-widest uppercase text-[#C5A880]">
-            Advanced Thermal Engineering & Heat Pumps
-          </span>
-        </div>
-
+      <div className="relative z-30 max-w-5xl mx-auto text-center space-y-8 animate-fadeIn pt-4 sm:pt-8">
         {/* Display Headline */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] font-display drop-shadow-md">
-          SUSTAINABLE THERMAL <br />
-          <span className="gold-gradient-text">PERFORMANCE</span>
+          ADVANCING INTO NEW <br />
+          <span className="gold-gradient-text">WAY OF HEATING</span>
         </h1>
 
-        {/* Dynamic Slide Subtitle */}
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-neutral-200 font-normal leading-relaxed drop-shadow min-h-[3.5rem] transition-opacity duration-500">
-          {currentSlide?.description || 'Pioneering ultra-low energy heat pumps, aerothermal heating, and clean thermal storage engineered for Himalayan climates and commercial applications.'}
-        </p>
-
         {/* Action CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
           <Link
             href={currentSlide?.url || '/#categories'}
             className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 rounded-xl bg-[#C5A880] px-8 py-4 text-xs font-bold uppercase tracking-wider text-[#0A0A0A] hover:bg-[#D4B890] transition-all shadow-xl shadow-[#C5A880]/20 group"
           >
-            <span>Explore Equipment</span>
+            <span>Explore Products</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
 

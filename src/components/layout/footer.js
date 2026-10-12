@@ -187,11 +187,6 @@ export default function Footer({ categories = [] }) {
         {/* Bottom Strip */}
         <div className="mt-12 pt-8 border-t border-[#1C1C1C] flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
           <p>© {new Date().getFullYear()} Innmotek LLP. All rights reserved.</p>
-          <div className="flex items-center space-x-6 text-[11px]">
-            <span>Precision Thermal Technology</span>
-            <span>•</span>
-            <span>Thermatec Architectural Standards</span>
-          </div>
         </div>
       </div>
     </footer>
