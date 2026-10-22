@@ -14,6 +14,21 @@ import Image from 'next/image';
 import { getServices } from '@/lib/api';
 import { ArrowRight, Wrench, ShieldCheck, Sparkles, Activity, Gauge, Flame } from 'lucide-react';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Engineering Services, Sizing & Maintenance | Innmotek',
+  description: 'Full-lifecycle thermodynamic services including HVAC sizing, CFD analysis, commissioning, maintenance, and warranty support.',
+  alternates: {
+    canonical: `${siteUrl}/services`,
+  },
+  openGraph: {
+    title: 'Engineering Services, Sizing & Maintenance | Innmotek',
+    description: 'Full-lifecycle thermodynamic services including HVAC sizing, CFD analysis, commissioning, maintenance, and warranty support.',
+    url: `${siteUrl}/services`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function ServicesPage() {

@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Pressurized Hot Water Storage Tanks & Buffer Vessels | Innmotek',
+  description: 'High-pressure thermal buffer vessels and stainless steel domestic hot water storage tanks tested up to 9 bar operating pressures.',
+  alternates: {
+    canonical: `${siteUrl}/hot-water-storage-tank`,
+  },
+  openGraph: {
+    title: 'Pressurized Hot Water Storage Tanks & Buffer Vessels | Innmotek',
+    description: 'High-pressure thermal buffer vessels and stainless steel domestic hot water storage tanks tested up to 9 bar operating pressures.',
+    url: `${siteUrl}/hot-water-storage-tank`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function StainlessWaterTankPage() {

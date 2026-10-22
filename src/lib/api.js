@@ -56,6 +56,31 @@ export async function getCategories() {
   return data?.categories || [];
 }
 
+export async function getAllCategoriesFlat() {
+  const data = await fetchFromApi('/categories/all');
+  if (data?.categories && data.categories.length > 0) {
+    return data.categories;
+  }
+  // Graceful fallback: recursively flatten hierarchical categories
+  const tree = await getCategories();
+  const flat = [];
+  const seen = new Set();
+  function extract(list) {
+    if (!Array.isArray(list)) return;
+    for (const item of list) {
+      if (item && item.slug && !seen.has(item.slug)) {
+        seen.add(item.slug);
+        flat.push(item);
+      }
+      if (item.subCategory) extract(item.subCategory);
+      if (item.childCategory) extract(item.childCategory);
+    }
+  }
+  extract(tree);
+  return flat;
+}
+
+
 export async function getCategoryDetail(slug) {
   const data = await fetchFromApi(`/category/${slug}`);
   return data || null;

@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Glass Lined Hot Water Storage Tanks | Innmotek LLP',
+  description: 'Heavy-duty porcelain enamel glass-lined buffer tanks and domestic hot water storage vessels engineered for extreme water hardness and corrosion resistance.',
+  alternates: {
+    canonical: `${siteUrl}/glass-lined-tanks`,
+  },
+  openGraph: {
+    title: 'Glass Lined Hot Water Storage Tanks | Innmotek LLP',
+    description: 'Heavy-duty porcelain enamel glass-lined buffer tanks and domestic hot water storage vessels engineered for extreme water hardness and corrosion resistance.',
+    url: `${siteUrl}/glass-lined-tanks`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function GlassLinedTanksPage() {

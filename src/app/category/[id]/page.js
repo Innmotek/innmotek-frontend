@@ -20,6 +20,51 @@ import SafeHtml from '@/components/common/safe-html';
 
 export const revalidate = 30;
 
+export async function generateMetadata({ params }) {
+  const categorySlug = params.id;
+  const [productsData, categoryData] = await Promise.all([
+    getCategoryProducts(categorySlug),
+    getCategoryDetail(categorySlug)
+  ]);
+
+  const category = productsData?.category || categoryData?.category;
+  const categoryTitle = category?.title || categorySlug.replace(/-/g, ' ').toUpperCase();
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+  const canonicalUrl = `${siteUrl.replace(/\/+$/, '')}/category/${encodeURIComponent(category?.slug || categorySlug)}`;
+
+  // Smart fallback hierarchy for admin SEO fields:
+  const title = category?.seo_title && category.seo_title.trim()
+    ? category.seo_title.trim()
+    : `${categoryTitle} | Heat Pump Systems & Thermal Solutions | Innmotek`;
+
+  const description = category?.seo_description && category.seo_description.trim()
+    ? category.seo_description.trim()
+    : (category?.description || `Explore our high-performance ${categoryTitle} models engineered for high thermodynamic COP efficiency, durability, and commercial reliability.`);
+
+  return {
+    title,
+    description,
+    keywords: category?.seo_keyword ? category.seo_keyword.split(',').map(k => k.trim()) : ['heat pumps', categoryTitle, 'thermal engineering'],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+      images: category?.image ? [{ url: category.image, alt: categoryTitle }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: category?.image ? [category.image] : [],
+    }
+  };
+}
+
 export default async function CategoryDetailPage({ params }) {
   const categorySlug = params.id;
 
@@ -38,8 +83,64 @@ export default async function CategoryDetailPage({ params }) {
 
   const categoryTitle = category?.title || categorySlug.replace(/-/g, ' ').toUpperCase();
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+  const canonicalUrl = `${siteUrl.replace(/\/+$/, '')}/category/${encodeURIComponent(category?.slug || categorySlug)}`;
+
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: categoryTitle,
+    url: canonicalUrl,
+    description: category?.description || `Commercial and residential ${categoryTitle} equipment range by Innmotek.`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: products.map((prod, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        url: `${siteUrl.replace(/\/+$/, '')}/products/${encodeURIComponent(prod.slug || prod.id)}`,
+        name: prod.title,
+        image: prod.image || undefined
+      }))
+    }
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Categories',
+        item: `${siteUrl}/category`
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: categoryTitle,
+        item: canonicalUrl
+      }
+    ]
+  };
+
   return (
     <div className="space-y-16 pt-28 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Schema.org CollectionPage & BreadcrumbList Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Pattern 1: Subpage Hero */}
       <div className="rounded-3xl border border-[#222222] bg-gradient-to-b from-[#161616] to-[#0D0D0D] p-8 sm:p-14 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#C5A880]/5 rounded-full blur-3xl pointer-events-none" />

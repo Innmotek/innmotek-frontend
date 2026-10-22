@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Automated Swimming Pool & Spa Thermal Covers | Innmotek',
+  description: 'Energy-conserving automated slatted swimming pool covers and spa thermal blankets engineered to eliminate water evaporation and retain water heat.',
+  alternates: {
+    canonical: `${siteUrl}/pool-and-spa-cover`,
+  },
+  openGraph: {
+    title: 'Automated Swimming Pool & Spa Thermal Covers | Innmotek',
+    description: 'Energy-conserving automated slatted swimming pool covers and spa thermal blankets engineered to eliminate water evaporation and retain water heat.',
+    url: `${siteUrl}/pool-and-spa-cover`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function PoolSpaCoverPage() {

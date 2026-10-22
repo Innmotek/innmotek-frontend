@@ -14,9 +14,19 @@ import FaqAccordion from './faq-accordion';
 import { HelpCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
 export const metadata = {
   title: 'Frequently Asked Questions | Innmotek Thermal Systems',
   description: 'Technical guidance, COP ratings, sub-zero heating operations, and installation advice for Innmotek heat pump systems.',
+  alternates: {
+    canonical: `${siteUrl}/faqs`,
+  },
+  openGraph: {
+    title: 'Frequently Asked Questions | Innmotek Thermal Systems',
+    description: 'Technical guidance, COP ratings, sub-zero heating operations, and installation advice for Innmotek heat pump systems.',
+    url: `${siteUrl}/faqs`,
+  }
 };
 
 export const revalidate = 30;
@@ -24,8 +34,27 @@ export const revalidate = 30;
 export default async function FaqsPage() {
   const faqs = await getFaqs();
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: (faqs || []).slice(0, 20).map(item => ({
+      '@type': 'Question',
+      name: item.question || item.title || '',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: (item.answer || item.description || '').replace(/<[^>]*>?/gm, '').trim()
+      }
+    }))
+  };
+
   return (
     <div className="space-y-16 pt-28 pb-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Schema.org FAQPage Rich Snippet */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       {/* Header */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <div className="inline-flex items-center space-x-2 rounded-full border border-[#C5A880]/40 bg-[#C5A880]/10 px-3.5 py-1">

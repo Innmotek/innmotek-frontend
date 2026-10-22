@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Pressurized Solar Thermosiphon Water Heaters | Innmotek',
+  description: 'High-efficiency pressurized thermosiphon solar water heating systems delivering zero-emission domestic hot water even in low solar irradiance climates.',
+  alternates: {
+    canonical: `${siteUrl}/pressurized-thermosiphon`,
+  },
+  openGraph: {
+    title: 'Pressurized Solar Thermosiphon Water Heaters | Innmotek',
+    description: 'High-efficiency pressurized thermosiphon solar water heating systems delivering zero-emission domestic hot water even in low solar irradiance climates.',
+    url: `${siteUrl}/pressurized-thermosiphon`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function PressurizedThermosiphonPage() {

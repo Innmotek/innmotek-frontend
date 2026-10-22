@@ -25,6 +25,21 @@ import {
   FileCheck2
 } from 'lucide-react';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Engineering Installations & Thermal Projects | Innmotek',
+  description: 'Industrial and commercial heat pump installations, centralized domestic hot water schemes, and regional HVAC implementations.',
+  alternates: {
+    canonical: `${siteUrl}/projects`,
+  },
+  openGraph: {
+    title: 'Engineering Installations & Thermal Projects | Innmotek',
+    description: 'Industrial and commercial heat pump installations, centralized domestic hot water schemes, and regional HVAC implementations.',
+    url: `${siteUrl}/projects`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function ProjectsPage() {

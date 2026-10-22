@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Modular Stainless Steel Panel Tanks | Innmotek LLP',
+  description: 'Precision-bolted sectional stainless steel modular water tanks delivering 1/30 the structural weight of concrete with rapid site assembly.',
+  alternates: {
+    canonical: `${siteUrl}/modular-panel-tank`,
+  },
+  openGraph: {
+    title: 'Modular Stainless Steel Panel Tanks | Innmotek LLP',
+    description: 'Precision-bolted sectional stainless steel modular water tanks delivering 1/30 the structural weight of concrete with rapid site assembly.',
+    url: `${siteUrl}/modular-panel-tank`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function ModularPanelTankPage() {

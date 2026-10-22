@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Full-Inverter Dehumidifier 360 | Indoor Pool Climate Systems | Innmotek',
+  description: 'Precision indoor pool and spa humidity management with full-inverter technology. DER 4.3 efficiency, whisper-quiet operation, and R32 refrigerant.',
+  alternates: {
+    canonical: `${siteUrl}/dehumidifier`,
+  },
+  openGraph: {
+    title: 'Full-Inverter Dehumidifier 360 | Indoor Pool Climate Systems | Innmotek',
+    description: 'Precision indoor pool and spa humidity management with full-inverter technology. DER 4.3 efficiency, whisper-quiet operation, and R32 refrigerant.',
+    url: `${siteUrl}/dehumidifier`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function DehumidifierPage() {

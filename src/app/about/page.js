@@ -19,9 +19,19 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
 export const metadata = {
   title: 'About Us | Innmotek Thermal Systems',
   description: 'Learn about Innmotek LLP, our sustainable heating mission, engineering standards, and advanced heat pump solutions.',
+  alternates: {
+    canonical: `${siteUrl}/about`,
+  },
+  openGraph: {
+    title: 'About Us | Innmotek Thermal Systems',
+    description: 'Learn about Innmotek LLP, our sustainable heating mission, engineering standards, and advanced heat pump solutions.',
+    url: `${siteUrl}/about`,
+  }
 };
 
 export const revalidate = 30;

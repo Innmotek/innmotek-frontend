@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Commercial Heat Pump Air Dryer Systems | Innmotek',
+  description: 'Industrial heat pump dehumidification drying systems delivering up to 75% electricity savings, precision temperature modulation from 18°C to 80°C, and SS304 food-grade construction.',
+  alternates: {
+    canonical: `${siteUrl}/heat-pump-air-dryer`,
+  },
+  openGraph: {
+    title: 'Commercial Heat Pump Air Dryer Systems | Innmotek',
+    description: 'Industrial heat pump dehumidification drying systems delivering up to 75% electricity savings, precision temperature modulation from 18°C to 80°C, and SS304 food-grade construction.',
+    url: `${siteUrl}/heat-pump-air-dryer`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function HeatPumpAirDryerPage() {

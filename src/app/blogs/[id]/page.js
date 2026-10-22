@@ -19,6 +19,53 @@ import { notFound } from 'next/navigation';
 
 export const revalidate = 30;
 
+export async function generateMetadata({ params }) {
+  const blogSlug = params.id;
+  const data = await getBlogDetail(blogSlug);
+  const blog = data?.blog;
+
+  if (!blog) {
+    return {
+      title: 'Technical Article',
+      description: 'Thermodynamic engineering, energy efficiency, and HVAC technology insights.'
+    };
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+  const canonicalUrl = `${siteUrl.replace(/\/+$/, '')}/blogs/${encodeURIComponent(blog.slug || blogSlug)}`;
+
+  const title = blog.seo_title && blog.seo_title.trim()
+    ? blog.seo_title.trim()
+    : `${blog.title} | Innmotek Technical Journal`;
+
+  const cleanSummary = blog.summary ? blog.summary.replace(/<[^>]*>?/gm, '').trim() : '';
+  const description = blog.seo_description && blog.seo_description.trim()
+    ? blog.seo_description.trim()
+    : (cleanSummary || `Read "${blog.title}" by Innmotek Engineering team.`);
+
+  return {
+    title,
+    description,
+    keywords: blog.seo_keyword ? blog.seo_keyword.split(',').map(k => k.trim()) : ['heat pump technology', 'energy savings', blog.title],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'article',
+      images: blog.image ? [{ url: blog.image, alt: blog.title }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: blog.image ? [blog.image] : [],
+    }
+  };
+}
+
 export default async function BlogDetailPage({ params }) {
   const blogSlug = params.id;
   const data = await getBlogDetail(blogSlug);
@@ -31,8 +78,73 @@ export default async function BlogDetailPage({ params }) {
   const relatedBlogs = data.blogs || [];
   const categories = data.categories || [];
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+  const canonicalUrl = `${siteUrl.replace(/\/+$/, '')}/blogs/${encodeURIComponent(blog.slug || blogSlug)}`;
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: blog.title,
+    image: blog.image ? [blog.image] : [],
+    description: (blog.summary || blog.description || '').replace(/<[^>]*>?/gm, '').slice(0, 500),
+    url: canonicalUrl,
+    datePublished: blog.date || '2024-01-01',
+    author: {
+      '@type': 'Organization',
+      name: 'Innmotek Engineering Desk',
+      url: siteUrl
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Innmotek LLP',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/images/logo-white.png`
+      }
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl
+    }
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Technical Journal',
+        item: `${siteUrl}/blogs`
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: blog.title,
+        item: canonicalUrl
+      }
+    ]
+  };
+
   return (
     <div className="space-y-16 pt-28 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Schema.org BlogPosting & BreadcrumbList Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Pattern 1: Editorial Subpage Hero */}
       <div className="rounded-3xl border border-[#222222] bg-gradient-to-b from-[#161616] to-[#0E0E0E] p-8 sm:p-14 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#C5A880]/5 rounded-full blur-3xl pointer-events-none" />

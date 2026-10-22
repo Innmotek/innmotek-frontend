@@ -14,6 +14,21 @@ import Image from 'next/image';
 import { getBlogs } from '@/lib/api';
 import { ArrowRight, Calendar, User, Sparkles, BookOpen, Clock } from 'lucide-react';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Thermal Engineering Journal & Clean Tech Insights | Innmotek',
+  description: 'Articles on thermodynamic engineering, inverter heat pump advancements, COP optimization, and commercial climate control.',
+  alternates: {
+    canonical: `${siteUrl}/blogs`,
+  },
+  openGraph: {
+    title: 'Thermal Engineering Journal & Clean Tech Insights | Innmotek',
+    description: 'Articles on thermodynamic engineering, inverter heat pump advancements, COP optimization, and commercial climate control.',
+    url: `${siteUrl}/blogs`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function BlogsPage() {

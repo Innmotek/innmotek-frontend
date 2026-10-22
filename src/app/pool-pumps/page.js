@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Variable Speed Inverter Pool Circulation Pumps | Innmotek',
+  description: 'Energy-saving variable frequency inverter swimming pool circulation pumps engineered for whisper-quiet hydraulics and robust chemical durability.',
+  alternates: {
+    canonical: `${siteUrl}/pool-pumps`,
+  },
+  openGraph: {
+    title: 'Variable Speed Inverter Pool Circulation Pumps | Innmotek',
+    description: 'Energy-saving variable frequency inverter swimming pool circulation pumps engineered for whisper-quiet hydraulics and robust chemical durability.',
+    url: `${siteUrl}/pool-pumps`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function PoolPumpsPage() {

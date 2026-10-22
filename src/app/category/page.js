@@ -15,6 +15,21 @@ import { getCategories } from '@/lib/api';
 import { Sparkles } from 'lucide-react';
 import ExpandableCategoryCard from '@/components/category/expandable-category-card';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Equipment Categories & Heat Pump Systems',
+  description: 'Explore Innmotek complete range of high-efficiency aerothermal heat pumps, solar thermal systems, buffer vessels, and clean energy heating solutions.',
+  alternates: {
+    canonical: `${siteUrl}/category`,
+  },
+  openGraph: {
+    title: 'Equipment Categories & Heat Pump Systems | Innmotek',
+    description: 'Explore Innmotek complete range of high-efficiency aerothermal heat pumps, solar thermal systems, buffer vessels, and clean energy heating solutions.',
+    url: `${siteUrl}/category`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function CategoriesPage() {

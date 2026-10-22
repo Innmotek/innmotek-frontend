@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Hydronic Radiators & Fan Coil Units (FCU) | Innmotek',
+  description: 'Ultra-thin architectural hydronic radiators and high-efficiency low-noise fan coil units engineered for modern heat pump central heating and cooling.',
+  alternates: {
+    canonical: `${siteUrl}/radiator-and-fancoil`,
+  },
+  openGraph: {
+    title: 'Hydronic Radiators & Fan Coil Units (FCU) | Innmotek',
+    description: 'Ultra-thin architectural hydronic radiators and high-efficiency low-noise fan coil units engineered for modern heat pump central heating and cooling.',
+    url: `${siteUrl}/radiator-and-fancoil`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function RadiatorAndFancoilPage() {

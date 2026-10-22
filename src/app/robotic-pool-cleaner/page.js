@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Autonomous AI Robotic Swimming Pool Cleaners | Innmotek',
+  description: 'Intelligent cordless and automated robotic swimming pool cleaners with smart navigation, wall climbing, and multi-layer water line filtration.',
+  alternates: {
+    canonical: `${siteUrl}/robotic-pool-cleaner`,
+  },
+  openGraph: {
+    title: 'Autonomous AI Robotic Swimming Pool Cleaners | Innmotek',
+    description: 'Intelligent cordless and automated robotic swimming pool cleaners with smart navigation, wall climbing, and multi-layer water line filtration.',
+    url: `${siteUrl}/robotic-pool-cleaner`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function RoboticPoolCleanerPage() {

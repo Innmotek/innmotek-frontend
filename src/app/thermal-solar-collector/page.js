@@ -8,6 +8,21 @@
 import { getCategoryProducts } from '@/lib/api';
 import ProductShowcaseTemplate from '@/components/showcase/product-showcase-template';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
+
+export const metadata = {
+  title: 'Evacuated Tube & Flat Plate Thermal Solar Collectors | Innmotek',
+  description: 'High-absorption solar thermal collectors delivering maximum solar radiation capture, engineered to integrate with heat pumps and centralized hot water storage.',
+  alternates: {
+    canonical: `${siteUrl}/thermal-solar-collector`,
+  },
+  openGraph: {
+    title: 'Evacuated Tube & Flat Plate Thermal Solar Collectors | Innmotek',
+    description: 'High-absorption solar thermal collectors delivering maximum solar radiation capture, engineered to integrate with heat pumps and centralized hot water storage.',
+    url: `${siteUrl}/thermal-solar-collector`,
+  }
+};
+
 export const revalidate = 30;
 
 export default async function ThermalSolarCollectorPage() {
