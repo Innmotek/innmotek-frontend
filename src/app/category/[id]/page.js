@@ -14,9 +14,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getCategoryDetail, getCategoryProducts } from '@/lib/api';
-import { ChevronRight, Sparkles, Layers, ArrowRight } from 'lucide-react';
+import { ChevronRight, Sparkles, Layers, ArrowRight, ArrowUpRight } from 'lucide-react';
 import ProductCard from '@/components/common/product-card';
 import SafeHtml from '@/components/common/safe-html';
+
+const FALLBACK_SCENE_IMAGES = [
+  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-1.webp',
+  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-2.webp',
+  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-3.webp',
+  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-4.webp'
+];
 
 export const revalidate = 30;
 
@@ -38,9 +45,10 @@ export async function generateMetadata({ params }) {
     ? category.seo_title.trim()
     : `${categoryTitle} | Heat Pump Systems & Thermal Solutions | Innmotek`;
 
+  const plainDescription = category?.description ? category.description.replace(/<[^>]*>/g, '').trim() : '';
   const description = category?.seo_description && category.seo_description.trim()
     ? category.seo_description.trim()
-    : (category?.description || `Explore our high-performance ${categoryTitle} models engineered for high thermodynamic COP efficiency, durability, and commercial reliability.`);
+    : (plainDescription || `Explore our high-performance ${categoryTitle} models engineered for high thermodynamic COP efficiency, durability, and commercial reliability.`);
 
   return {
     title,
@@ -86,12 +94,15 @@ export default async function CategoryDetailPage({ params }) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://innmotek.com';
   const canonicalUrl = `${siteUrl.replace(/\/+$/, '')}/category/${encodeURIComponent(category?.slug || categorySlug)}`;
 
+  const plainDescription = category?.description ? category.description.replace(/<[^>]*>/g, '').trim() : '';
+  const hasDescription = Boolean(plainDescription.length > 0);
+
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: categoryTitle,
     url: canonicalUrl,
-    description: category?.description || `Commercial and residential ${categoryTitle} equipment range by Innmotek.`,
+    description: plainDescription || `Commercial and residential ${categoryTitle} equipment range by Innmotek.`,
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: products.map((prod, idx) => ({
@@ -166,35 +177,79 @@ export default async function CategoryDetailPage({ params }) {
             {categoryTitle}
           </h1>
 
-          <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-2xl">
-            {category?.description || `Explore our high-performance ${categoryTitle} models engineered for high thermodynamic efficiency, low running cost, and long-term durability.`}
-          </p>
-        </div>
-
-        {/* Child Subcategories Chips with Glassmorphism Shine & Glow */}
-        {subCategories.length > 0 && (
-          <div className="mt-8 pt-6 border-t border-[#222222] space-y-3 relative z-10">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[#C5A880]">
-              Sub-Specialties & Product Lines:
+          {hasDescription ? (
+            <SafeHtml
+              className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-2xl [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1.5 [&>ul>li]:text-neutral-300 [&>p]:mb-2"
+              html={category.description}
+            />
+          ) : (
+            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-2xl">
+              Explore our high-performance {categoryTitle} models engineered for high thermodynamic efficiency, low running cost, and long-term durability.
             </p>
-            <div className="flex flex-wrap gap-3">
-              {subCategories.map((sub) => (
+          )}
+        </div>
+      </div>
+
+      {/* Option 4: Immersive Image Split Navigation (Full-Bleed Panels) */}
+      {subCategories.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b border-[#202020] pb-3">
+            <div className="flex items-center space-x-2">
+              <span className="h-2 w-2 rounded-full bg-[#C5A880] shadow-sm shadow-[#C5A880]" />
+              <h2 className="text-xs font-bold uppercase tracking-wider text-white">
+                Sub-Specialties & Product Lines ({subCategories.length})
+              </h2>
+            </div>
+            <span className="text-[11px] text-[#C5A880] font-mono">
+              Explore specialized engineering divisions
+            </span>
+          </div>
+
+          <div
+            className={`grid grid-cols-1 ${
+              subCategories.length === 1
+                ? 'md:grid-cols-1'
+                : subCategories.length === 2
+                ? 'md:grid-cols-2'
+                : subCategories.length === 3
+                ? 'md:grid-cols-3'
+                : 'sm:grid-cols-2 lg:grid-cols-3'
+            } gap-0 rounded-3xl overflow-hidden border border-[#2B2B2B] bg-[#0E0E0E] min-h-[360px] sm:min-h-[400px] shadow-2xl`}
+          >
+            {subCategories.map((sub, idx) => {
+              const imageSrc = sub.image || FALLBACK_SCENE_IMAGES[idx % FALLBACK_SCENE_IMAGES.length];
+              return (
                 <Link
                   key={sub.slug}
                   href={`/category/${sub.slug}`}
-                  className="group relative inline-flex items-center space-x-2.5 rounded-2xl border border-[#C5A880]/35 bg-gradient-to-r from-[#1A1A1A]/95 via-[#242424]/85 to-[#1A1A1A]/95 backdrop-blur-xl px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg hover:shadow-[0_0_25px_rgba(197,168,128,0.4)] hover:border-[#C5A880] hover:scale-[1.03] transition-all duration-300 overflow-hidden"
+                  className="group relative h-full min-h-[340px] sm:min-h-[400px] cursor-pointer overflow-hidden border-b sm:border-b-0 sm:border-r last:border-b-0 last:border-r-0 border-[#222222] flex flex-col justify-end p-8 transition-all duration-500"
                 >
-                  {/* Subtle Glassmorphism Shine Stripe */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
-                  
-                  <span className="h-2 w-2 rounded-full bg-[#C5A880] shrink-0 shadow-sm shadow-[#C5A880]" />
-                  <span className="tracking-wide group-hover:text-[#C5A880] transition-colors">{sub.title}</span>
+                  <Image
+                    src={imageSrc}
+                    alt={sub.title}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-85 group-hover:opacity-75 transition-opacity" />
+
+                  {/* Top-Right Floating Arrow Pill */}
+                  <div className="absolute top-6 right-6 z-10 h-10 w-10 rounded-full border border-white/10 bg-black/40 backdrop-blur-md flex items-center justify-center text-white/70 group-hover:text-[#C5A880] group-hover:border-[#C5A880]/50 group-hover:bg-black/70 group-hover:scale-110 transition-all duration-300">
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+
+                  <div className="relative z-10 space-y-3">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-white group-hover:text-[#C5A880] transition-colors uppercase tracking-wider font-display">
+                      {sub.title}
+                    </h3>
+                    <div className="w-12 h-0.5 bg-[#C5A880] group-hover:w-24 transition-all duration-300" />
+                  </div>
                 </Link>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Pattern 4 Grid: Products List */}
       <div className="space-y-6">
