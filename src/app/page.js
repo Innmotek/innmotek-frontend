@@ -47,7 +47,7 @@ import {
 import ProductCard from '@/components/common/product-card';
 import NewsletterBox from '@/components/common/newsletter-box';
 
-export const revalidate = 5;
+export const revalidate = 30;
 
 export default async function HomePage() {
   const [heroData, categories, featured, testimonials, brands, blogs] = await Promise.all([
@@ -276,11 +276,11 @@ export default async function HomePage() {
 
             <div className="relative h-[340px] sm:h-[420px] rounded-2xl border border-[#2B2B2B] overflow-hidden bg-[#181818]">
               <Image
-                src="https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/products/3e12ee32-093e-43f5-87ab-d90b53a3f6bc.webp"
+                src="/frontend/images/products/3e12ee32-093e-43f5-87ab-d90b53a3f6bc.webp"
                 alt="Innmotek Heating Systems"
                 fill
                 className="object-cover"
-                unoptimized
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-transparent to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md">
@@ -318,7 +318,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {latestBlogs.map((blog) => {
-              const blogImage = blog.image || 'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/blogs/8cba50ef-bbd0-40e1-8848-35687fe48d0b.webp';
+              const blogImage = blog.image || '/frontend/images/blogs/8cba50ef-bbd0-40e1-8848-35687fe48d0b.webp';
               const blogDate = blog.created_at ? new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Technical Briefing';
 
               return (

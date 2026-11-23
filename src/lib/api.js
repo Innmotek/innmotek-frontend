@@ -11,12 +11,34 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || (
     : 'http://localhost:5000/api'
 );
 
+const USE_LOCAL_IMAGES = process.env.NEXT_PUBLIC_USE_LOCAL_IMAGES !== 'false';
+
+function normalizeMediaUrls(data) {
+  if (!USE_LOCAL_IMAGES || !data || typeof data !== 'object') return data;
+  if (Array.isArray(data)) {
+    return data.map(normalizeMediaUrls);
+  }
+  const result = { ...data };
+  for (const [key, val] of Object.entries(result)) {
+    if (typeof val === 'string' && val.includes('/storage/v1/object/public/')) {
+      const parts = val.split('/storage/v1/object/public/');
+      result[key] = `/frontend/images/${parts[1]}`;
+    } else if (typeof val === 'string' && val.includes('https://innmotek-backend.onrender.com/frontend/images/')) {
+      const parts = val.split('https://innmotek-backend.onrender.com/frontend/images/');
+      result[key] = `/frontend/images/${parts[1]}`;
+    } else if (typeof val === 'object' && val !== null) {
+      result[key] = normalizeMediaUrls(val);
+    }
+  }
+  return result;
+}
+
 async function fetchFromApi(endpoint, options = {}) {
   try {
     const isDev = process.env.NODE_ENV !== 'production';
     const fetchOptions = isDev
       ? { cache: 'no-store', ...options }
-      : { next: { revalidate: 5 }, ...options };
+      : { next: { revalidate: 30 }, ...options };
 
     const res = await fetch(`${API_BASE}${endpoint}`, fetchOptions);
 
@@ -25,7 +47,8 @@ async function fetchFromApi(endpoint, options = {}) {
       return null;
     }
 
-    return await res.json();
+    const json = await res.json();
+    return normalizeMediaUrls(json);
   } catch (err) {
     console.error(`[API Error] ${endpoint}:`, err);
     return null;

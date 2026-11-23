@@ -36,7 +36,7 @@ export default function ThermatecCarousel({ categories = [] }) {
     const interval = setInterval(() => {
       if (!scrollRef.current) return;
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      
+
       // If at or near end, loop back smoothly to start
       if (scrollLeft >= scrollWidth - clientWidth - 20) {
         scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
@@ -77,7 +77,7 @@ export default function ThermatecCarousel({ categories = [] }) {
           className="flex space-x-5 overflow-x-auto scroll-smooth scrollbar-none pb-4 pt-1 px-2 sm:px-4 snap-x snap-mandatory"
         >
           {categories.map((cat) => {
-            const catImage = cat.image || 'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/categories/9a01b0f1-4db5-45cf-a3fe-8924b1a45749.webp';
+            const catImage = cat.image || '/frontend/images/categories/9a01b0f1-4db5-45cf-a3fe-8924b1a45749.webp';
             const catHref = `/category/${cat.slug || cat.id}`;
 
             return (
@@ -94,7 +94,7 @@ export default function ThermatecCarousel({ categories = [] }) {
                       alt={cat.title}
                       fill
                       className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                      unoptimized
+                      sizes="(max-width: 768px) 320px, 360px"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-neutral-600">
@@ -125,11 +125,10 @@ export default function ThermatecCarousel({ categories = [] }) {
         <button
           onClick={() => scroll('prev')}
           disabled={!canScrollLeft}
-          className={`inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl transition-all ${
-            canScrollLeft
+          className={`inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl transition-all ${canScrollLeft
               ? 'text-neutral-300 hover:text-[#C5A880] hover:bg-[#1A1A1A] cursor-pointer'
               : 'text-neutral-600 cursor-not-allowed opacity-40'
-          }`}
+            }`}
           aria-label="Previous Products"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -149,11 +148,10 @@ export default function ThermatecCarousel({ categories = [] }) {
         <button
           onClick={() => scroll('next')}
           disabled={!canScrollRight}
-          className={`inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl transition-all ${
-            canScrollRight
+          className={`inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl transition-all ${canScrollRight
               ? 'text-neutral-300 hover:text-[#C5A880] hover:bg-[#1A1A1A] cursor-pointer'
               : 'text-neutral-600 cursor-not-allowed opacity-40'
-          }`}
+            }`}
           aria-label="Next Products"
         >
           <span>NEXT</span>
