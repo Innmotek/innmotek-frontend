@@ -19,11 +19,26 @@ import ProductCard from '@/components/common/product-card';
 import SafeHtml from '@/components/common/safe-html';
 
 const FALLBACK_SCENE_IMAGES = [
-  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-1.webp',
-  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-2.webp',
-  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-3.webp',
-  'https://fqrmvgfbrcgyszgefzlp.supabase.co/storage/v1/object/public/banners/hero-slide-4.webp'
+  '/frontend/images/banners/hero-slide-1.webp',
+  '/frontend/images/banners/hero-slide-2.webp',
+  '/frontend/images/banners/hero-slide-3.webp',
+  '/frontend/images/banners/hero-slide-4.webp'
 ];
+
+const SHOWCASE_ROUTES = {
+  'pool-and-spa-cover': '/pool-and-spa-cover',
+  'pool-pumps': '/pool-pumps',
+  'pool-pump': '/pool-pumps',
+  'robotic-pool-cleaner': '/robotic-pool-cleaner',
+  'dehumidifier': '/dehumidifier',
+  'hot-water-storage-tank': '/hot-water-storage-tank',
+  'modular-panel-tank': '/modular-panel-tank',
+  'thermal-solar-collector': '/thermal-solar-collector',
+  'pressurized-thermosiphon': '/pressurized-thermosiphon',
+  'radiator-and-fancoil': '/radiator-and-fancoil',
+  'glass-lined-tanks': '/glass-lined-tanks',
+  'heat-pump-air-dryer': '/heat-pump-air-dryer'
+};
 
 export const revalidate = 30;
 
@@ -50,6 +65,11 @@ export async function generateMetadata({ params }) {
     ? category.seo_description.trim()
     : (plainDescription || `Explore our high-performance ${categoryTitle} models engineered for high thermodynamic COP efficiency, durability, and commercial reliability.`);
 
+  const rawImage = category?.image;
+  const ogImageUrl = rawImage
+    ? (rawImage.startsWith('http') ? rawImage : `${siteUrl.replace(/\/+$/, '')}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`)
+    : `${siteUrl.replace(/\/+$/, '')}/images/logo-white.png`;
+
   return {
     title,
     description,
@@ -62,13 +82,13 @@ export async function generateMetadata({ params }) {
       description,
       url: canonicalUrl,
       type: 'website',
-      images: category?.image ? [{ url: category.image, alt: categoryTitle }] : [],
+      images: [{ url: ogImageUrl, alt: categoryTitle }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: category?.image ? [category.image] : [],
+      images: [ogImageUrl],
     }
   };
 }
@@ -218,10 +238,11 @@ export default async function CategoryDetailPage({ params }) {
           >
             {subCategories.map((sub, idx) => {
               const imageSrc = sub.image || FALLBACK_SCENE_IMAGES[idx % FALLBACK_SCENE_IMAGES.length];
+              const subHref = SHOWCASE_ROUTES[sub.slug] || `/category/${sub.slug}`;
               return (
                 <Link
                   key={sub.slug}
-                  href={`/category/${sub.slug}`}
+                  href={subHref}
                   className="group relative h-full min-h-[340px] sm:min-h-[400px] cursor-pointer overflow-hidden border-b sm:border-b-0 sm:border-r last:border-b-0 last:border-r-0 border-[#222222] flex flex-col justify-end p-8 transition-all duration-500"
                 >
                   <Image
@@ -229,7 +250,7 @@ export default async function CategoryDetailPage({ params }) {
                     alt={sub.title}
                     fill
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                    unoptimized
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-85 group-hover:opacity-75 transition-opacity" />
 
